@@ -22,7 +22,7 @@ function App() {
     <Routes>
       <Route element={<ProtectedRoute isAllowed={userIsAuthenticated} redirectPath="/login"/>}>
         <Route index element={<IndexPage/>} path="/"/>
-        <Route index element={<StatisticsPage/>} path="/statistics"/>
+        <Route element={<StatisticsPage/>} path="/statistics"/>
       </Route>
       <Route element={<ProtectedRoute isAllowed={!userIsAuthenticated} redirectPath="/"/>}>
         <Route element={<LoginPage/>} path="/login"/>

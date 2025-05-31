@@ -1,7 +1,9 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from users.models import User
+
+User = get_user_model()
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -32,3 +34,10 @@ class TokenObtainWithUsernameSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data['username'] = self.user.username
         return data
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('timezone', 'username', 'email')
+        read_only_fields = ('username', 'email')

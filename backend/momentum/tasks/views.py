@@ -16,7 +16,7 @@ class TaskViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['archived']
 
-    def _get_task(self):
+    def _get_task(self) -> Task:
         return get_object_or_404(
             Task,
             pk=self.request.parser_context['kwargs'][self.lookup_field]
@@ -25,8 +25,7 @@ class TaskViewSet(ModelViewSet):
     @extend_schema(request=None, responses=None)
     @action(methods=('POST',), detail=True)
     def complete(self, request, pk):
-        task = self._get_task()
-        TaskCompletion.objects.create(task=task, expired=task.expired)
+        self._get_task().create_completion()
         return Response()
 
     @extend_schema(request=None, responses=None)

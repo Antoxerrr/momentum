@@ -24,7 +24,6 @@ class TaskSerializer(serializers.ModelSerializer):
     penalty_task = SingleTaskCreateSerializer()
     periodical = serializers.SerializerMethodField()
     actual_deadline = serializers.SerializerMethodField()
-    expired = serializers.SerializerMethodField()
     completed = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -48,11 +47,6 @@ class TaskSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.BOOL)
     def get_periodical(task: Task) -> bool:
         return bool(task.period)
-
-    @staticmethod
-    @extend_schema_field(OpenApiTypes.BOOL)
-    def get_expired(task: Task) -> bool:
-        return task.expired
 
     @staticmethod
     @extend_schema_field(OpenApiTypes.DATE)
