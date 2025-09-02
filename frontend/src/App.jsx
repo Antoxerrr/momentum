@@ -8,21 +8,20 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkAuthentication} from "@/store/user.js";
 import {useEffect} from "react";
 import StatisticsPage from "@/pages/statistics.jsx";
+import ProfilePage from "@/pages/profile";
 
 function App() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(checkAuthentication());
-  }, [dispatch]);
-
+  dispatch(checkAuthentication());
+  
   const userIsAuthenticated = useSelector(state => state.user.isAuthenticated);
 
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={userIsAuthenticated} redirectPath="/login"/>}>
-        <Route index element={<IndexPage/>} path="/"/>
+        <Route element={<IndexPage/>} path="/"/>
         <Route element={<StatisticsPage/>} path="/statistics"/>
+        <Route element={<ProfilePage/>} path="/profile"/>
       </Route>
       <Route element={<ProtectedRoute isAllowed={!userIsAuthenticated} redirectPath="/"/>}>
         <Route element={<LoginPage/>} path="/login"/>

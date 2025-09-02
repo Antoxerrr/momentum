@@ -2,53 +2,68 @@ import datetime
 
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
+from django.db.transaction import atomic
 from rest_framework import serializers
 
 from tasks.models import Task
 
 
-class SingleTaskCreateSerializer(serializers.ModelSerializer):
+class PenaltyTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
-        read_only_fields = (
-            'completed',
-            'archived',
-            'user',
-            'penalty_task'
+        fields = (
+            'name',
+            'description'
         )
 
 
 class TaskSerializer(serializers.ModelSerializer):
 
-    penalty_task = SingleTaskCreateSerializer()
-    periodical = serializers.SerializerMethodField()
-    actual_deadline = serializers.SerializerMethodField()
+    penalty_task = PenaltyTaskSerializer(required=False)
+    actual_deadline = serializers.DateField(read_only=True)
     completed = serializers.BooleanField(read_only=True)
+    expired = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Task
-        fields = '__all__'
-        read_only_fields = (
+        fields = (
+            'id',
+            'name',
+            'description',
+            'penalty_task',
+            'date',
+            'period',
             'completed',
-            'archived',
-            'user'
+            'expired',
+            'actual_deadline',
+        )
+        read_only_fields = (
+            'id',
+            'completed',
+            'expired',
+            'actual_deadline',
         )
 
-    @staticmethod
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_penalty_task(task: Task) -> dict | None:
-        penalty_task = task.penalty_task
+    def validate(self, attrs):
+        if attrs.get('period') and attrs.get('date'):
+            raise serializers.ValidationError('Укажите только дату или только период')
+        if not attrs.get('period') and not attrs.get('date'):
+            raise serializers.ValidationError('Укажите дату или период')
+        return attrs
+
+    @atomic
+    def create(self, validated_data: dict):
+        request = self.context['request']
+
+        penalty_task_data = validated_data.pop('penalty_task')
+        penalty_task = None
+
+        if penalty_task_data:
+            penalty_task = Task.objects.create(**penalty_task_data, user=request.user)
+        
+        task = Task(**validated_data, user=request.user)
         if penalty_task:
-            return TaskSerializer(penalty_task).data
-        return None
+            task.penalty_task = penalty_task
+        task.save()
 
-    @staticmethod
-    @extend_schema_field(OpenApiTypes.BOOL)
-    def get_periodical(task: Task) -> bool:
-        return bool(task.period)
-
-    @staticmethod
-    @extend_schema_field(OpenApiTypes.DATE)
-    def get_actual_deadline(task: Task) -> datetime.date:
-        return task.actual_deadline
+        return task

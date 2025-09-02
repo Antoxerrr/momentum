@@ -1,13 +1,13 @@
-const ACCOUNT_KEY = 'account_data';
+const ACCESS_TOKEN_KEY = 'access_token';
 
-export function getAccountData() {
-  return JSON.parse(localStorage.getItem(ACCOUNT_KEY))
+export function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-export function setAccountData(username, accessToken, refreshToken) {
-  localStorage.setItem(ACCOUNT_KEY, JSON.stringify({username, accessToken, refreshToken}))
+export function setAccessToken(accessToken) {
+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
 }
 
-export function purgeAccountData() {
-  localStorage.removeItem(ACCOUNT_KEY);
+export function purgeAccessToken() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
 }

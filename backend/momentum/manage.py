@@ -2,9 +2,12 @@
 import os
 import sys
 
+from dotenv import load_dotenv
+
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.dirname(CURRENT_DIR))
 
+load_dotenv()
 
 def main():
     """Run administrative tasks."""

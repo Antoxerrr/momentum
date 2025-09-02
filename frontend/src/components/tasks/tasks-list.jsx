@@ -1,24 +1,24 @@
 import {TaskCard} from "./task-card.jsx";
 import {useEffect} from "react";
-import {getSortedActualTasks, loadTasks} from "@/store/tasks.js";
+import {loadTasks} from "@/store/tasks.js";
 import {useDispatch, useSelector} from "react-redux";
-import {Divider} from "@heroui/divider";
-import {TaskForm} from "@/components/tasks/task-form.jsx";
+import { TasksToolbar } from "./tasks-toolbar.jsx";
 
 export function TasksList() {
-  const sortedActualTasks = useSelector(getSortedActualTasks);
+  const tasksList = useSelector(state => state.tasks.tasksList);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadTasks());
+    dispatch(loadTasks({current: true}));
   }, []);
 
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-1/2">
-        <TaskForm/>
-        <Divider/>
-        {sortedActualTasks.map(task => <TaskCard key={task.id} task={task}/>)}
+        <TasksToolbar/>
+        <div className="flex flex-col gap-3">
+          {tasksList.map(task => <TaskCard key={task.id} task={task}/>)}
+        </div>
       </div>
     </div>
   )

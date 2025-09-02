@@ -21,7 +21,7 @@ def _create_completion(task: Task):
 
 
 def _reload_task(task: Task):
-    return Task.objects.annotate_actual_state().get(pk=task.pk)
+    return Task.objects.annotate_user_today().annotate_actual_state().get(pk=task.pk)
 
 
 @pytest.mark.parametrize("period", [

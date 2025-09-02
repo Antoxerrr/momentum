@@ -1,37 +1,64 @@
+from django.db.transaction import atomic
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from tasks.filters import TasksFilter
 from tasks.models import Task, TaskCompletion
 from tasks.serializers import TaskSerializer
 
 
 class TaskViewSet(ModelViewSet):
 
-    queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['archived']
+    filterset_class = TasksFilter
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        user_tz = self.request.query_params.get('tz')
+
+        return (
+            self.request.user.tasks
+            .annotate_user_today(user_tz)
+            .annotate_actual_state()
+        )
 
     def _get_task(self) -> Task:
         return get_object_or_404(
-            Task,
-            pk=self.request.parser_context['kwargs'][self.lookup_field]
+            Task.objects.annotate_expired(),
+            pk=self.kwargs[self.lookup_field]
         )
 
+    @atomic
     @extend_schema(request=None, responses=None)
     @action(methods=('POST',), detail=True)
     def complete(self, request, pk):
-        self._get_task().create_completion()
+        task = self._get_task()
+        task.create_completion()
+        if not task.period:
+            task.archived = True
+            task.save()
         return Response()
 
+    @atomic
     @extend_schema(request=None, responses=None)
     @action(methods=('POST',), detail=True)
     def undo_complete(self, request, pk):
+        task = self._get_task()
         TaskCompletion.objects.filter(
-            task=self._get_task()
+            task=task
         ).order_by('-created').first().delete()
+        if not task.period:
+            task.archived = False
+            task.save()
         return Response()

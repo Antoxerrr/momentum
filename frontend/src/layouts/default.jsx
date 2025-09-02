@@ -1,5 +1,5 @@
 import BaseLayout from "./base.jsx";
-import {Navbar} from "@/components/navbar.jsx";
+import {Navbar} from "@/components/navbar/navbar.jsx";
 
 export default function DefaultLayout({children}) {
   return (

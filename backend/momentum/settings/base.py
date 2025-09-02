@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -7,7 +8,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-*(e1w_8)tow%wc_eto5ig13g!vgrwy)dfcg6wmm+22n989a%dy'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = False
 
@@ -18,9 +19,9 @@ INSTALLED_APPS = [
     'tasks',
     'users',
     'corsheaders',
-    'rest_framework_simplejwt.token_blacklist',
-    'rest_framework_simplejwt',
+    'django_filters',
     'drf_spectacular',
+    'rest_framework.authtoken',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -86,7 +87,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Asia/Vladivostok'
 
@@ -102,7 +103,7 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
@@ -113,8 +114,4 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SCHEMA_PATH_PREFIX': r'/api/',
-}
-
-SIMPLE_JWT = {
-    'TOKEN_OBTAIN_SERIALIZER': 'users.serializers.TokenObtainWithUsernameSerializer'
 }

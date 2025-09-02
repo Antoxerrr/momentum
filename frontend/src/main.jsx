@@ -7,7 +7,7 @@ import { Providers } from "./providers.jsx";
 import "@/styles/globals.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <React.StrictMode cla>
     <BrowserRouter>
       <Providers>
         <App />

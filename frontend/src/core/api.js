@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getAccountData} from "@/core/local-storage.js";
+import {getAccessToken, purgeAccessToken} from "@/core/local-storage.js";
 
 
 function getDefaultBaseUrl() {
@@ -27,8 +27,11 @@ class APIClient {
     this.client.interceptors.response.use(
       response => response,
       error => {
-        if (error.response?.status === 401) {
-          // TODO: Перенаправление на логин
+        if (error.response.status === 401) {
+          purgeAccessToken();
+          this.setAuthToken();
+          // TODO: хрень?
+          location.href = '/login';
         }
         return Promise.reject(error);
       }
@@ -36,9 +39,9 @@ class APIClient {
   }
 
   setAuthToken() {
-    const accountData = getAccountData();
-    if (accountData && accountData.accessToken) {
-      this.client.defaults.headers.common['Authorization'] = accountData.accessToken;
+    const token = getAccessToken();
+    if (token) {
+      this.client.defaults.headers.common['Authorization'] = `Token ${token}`;
     } else {
       delete this.client.defaults.headers.common['Authorization'];
     }
@@ -68,12 +71,12 @@ class BaseAPIModule {
 }
 
 class CRUDModule extends BaseAPIModule{
-  async list() {
-    return await this.api.get(this.path);
+  async list(params) {
+    return await this.api.get(this.path, params);
   }
 
-  async get(id) {
-    return await this.api.get(detailedPath(this.path, id));
+  async retrieve(id, params) {
+    return await this.api.get(detailedPath(this.path, id), params);
   }
 
   async create(data) {
@@ -99,15 +102,19 @@ class UsersModule extends BaseAPIModule {
   }
 
   async login(data) {
-    return await this.api.post("token/", data);
+    return await this.api.post("users/login/", data);
   }
 
-  async logout(refreshToken) {
-    return await this.api.post("token/blacklist/", {refresh: refreshToken});
+  async me() {
+    return await this.api.get("users/me/");
   }
 
-  async refresh(refreshToken) {
-    return await this.api.post("token/refresh/", {refresh: refreshToken});
+  async editMe(data) {
+    return await this.api.patch("users/me/", data);
+  }
+
+  async availableTimezones() {
+    return await this.api.get("users/available_timezones/");
   }
 }
 

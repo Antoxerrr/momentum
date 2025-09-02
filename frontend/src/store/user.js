@@ -1,38 +1,60 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {getAccountData, purgeAccountData, setAccountData} from "@/core/local-storage.js";
+import {
+  getAccessToken,
+  purgeAccessToken,
+  setAccessToken,
+} from "@/core/local-storage.js";
+import { getAPI } from '@/core/api';
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
     isAuthenticated: false,
-    username: null
+    account: {},
   },
   reducers: {
     login(state, action) {
-      const {username, access, refresh} = action.payload;
-      state.username = username;
+      const {token} = action.payload;
       state.isAuthenticated = true;
-      setAccountData(username, access, refresh);
+      setAccessToken(token);
     },
 
     logout(state) {
-      state.username = null;
+      state.account = {};
       state.isAuthenticated = false;
-      purgeAccountData();
+      purgeAccessToken();
+    },
+
+    login(state, action) {
+      const {token} = action.payload;
+      state.isAuthenticated = true;
+      setAccessToken(token);
+    },
+
+    setUserAccount(state, action) {
+      state.account = action.payload;
     },
 
     checkAuthentication(state) {
-      const accountData = getAccountData();
-      if (accountData && accountData.username && accountData.accessToken && accountData.refreshToken) {
-        state.username = accountData.username;
+      const token = getAccessToken();
+
+      if (token) {
         state.isAuthenticated = true;
       } else {
-        state.username = null;
+        state.username = {};
         state.isAuthenticated = false;
       }
     }
   }
 });
+
+
+export function loadUserAccount() {
+  return async function (dispatch) {
+    const response = await getAPI().users.me();
+    dispatch(userSlice.actions.setUserAccount(response.data));
+  }
+}
 
 export const { login, logout, checkAuthentication } = userSlice.actions;
 

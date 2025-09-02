@@ -3,15 +3,24 @@ import {Link} from "@heroui/link";
 import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import AuthForm from "@/components/auth/auth-form.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {addToast} from "@heroui/toast";
-import {getAPI} from "@/core/api.js";
+import { getAPI } from "@/core/api.js";
+import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+
 
 export default function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  let [timezoneChoices, setTimezoneChoices] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getAPI().users.availableTimezones().then(response => {
+      setTimezoneChoices(response.data.timezones);
+    });
+  }, []);
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -21,6 +30,7 @@ export default function RegisterPage() {
     const [formValid, validationErrors] = validateForm(data);
     setErrors(validationErrors);
     if (!formValid) {
+      setLoading(false);
       return;
     }
 
@@ -65,11 +75,26 @@ export default function RegisterPage() {
         />
         <Input
           isRequired
-          label="Пожтверждение пароля"
+          label="Подтверждение пароля"
           labelPlacement="inside"
           name="password_confirm"
           type="password"
         />
+
+        {
+        timezoneChoices.length > 0 &&
+        <Autocomplete
+          isRequired
+          defaultSelectedKeys="UTC"
+          label="Часовой пояс"
+          name="timezone"
+        >
+          {timezoneChoices.map((timezone) => (
+            <AutocompleteItem key={timezone}>{timezone}</AutocompleteItem>
+          ))}
+        </Autocomplete>
+        }
+
         <Button type="submit" color="primary" variant="shadow" className="w-full mt-3 shadow-md" isLoading={loading}>
           Регистрация
         </Button>

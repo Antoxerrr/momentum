@@ -24,11 +24,13 @@ export default function LoginPage() {
     try {
       const api = getAPI();
       const response = await api.users.login(data);
+
       dispatch(login(response.data));
       api.setAuthToken();
+
       navigate('/', {replace: true});
     } catch (error) {
-      error.status === 401 && setIsWrongCredentials(true);
+      error.status === 400 && setIsWrongCredentials(true);
     } finally {
       setLoading(false);
     }
