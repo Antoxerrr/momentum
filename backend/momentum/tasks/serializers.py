@@ -55,7 +55,7 @@ class TaskSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict):
         request = self.context['request']
 
-        penalty_task_data = validated_data.pop('penalty_task')
+        penalty_task_data = validated_data.pop('penalty_task', None)
         penalty_task = None
 
         if penalty_task_data:
