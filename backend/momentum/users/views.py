@@ -3,7 +3,8 @@ from zoneinfo import available_timezones
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.serializers import RegisterSerializer, UserSerializer
@@ -41,6 +42,7 @@ def available_timezones_view(request):
 
 @extend_schema(request=UserSerializer, responses=UserSerializer)
 @api_view(['GET', 'PATCH'])
+@permission_classes([IsAuthenticated])
 def user_view(request):
     if request.method == 'GET':
         return Response(UserSerializer(request.user).data)
