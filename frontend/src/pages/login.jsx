@@ -4,15 +4,16 @@ import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import AuthForm from "@/components/auth/auth-form.jsx";
 import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {login} from "@/store/user.js";
 import {useNavigate} from "react-router-dom";
-import {getAPI} from "@/core/api.js";
+import {useShallow} from "zustand/react/shallow";
+import {useUserStore} from "@/store/user.js";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [isWrongCredentials, setIsWrongCredentials] = useState(false);
-  const dispatch = useDispatch();
+  const { login } = useUserStore(
+    useShallow(state => ({ login: state.login }))
+  );
   const navigate = useNavigate();
 
   const onSubmit = async e => {
@@ -22,11 +23,7 @@ export default function LoginPage() {
     const data = Object.fromEntries(new FormData(e.currentTarget));
 
     try {
-      const api = getAPI();
-      const response = await api.users.login(data);
-
-      dispatch(login(response.data));
-      api.setAuthToken();
+      await login(data);
 
       navigate('/', {replace: true});
     } catch (error) {

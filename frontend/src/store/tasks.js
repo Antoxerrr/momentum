@@ -1,39 +1,65 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { getAPI } from "@/core/api.js";
-import { getUserTimeZone } from '@/core/utils';
+import { getAPI } from '@/core/api';
+import { TASKS_LIST_TABS } from '@/core/const/tasks';
+import { create } from 'zustand';
 
-export const tasksSlice = createSlice({
-  name: 'tasks',
-  initialState: {
-    tasksList: [],
-    loading: false
+const tabsToFilters = {
+  [TASKS_LIST_TABS.CURRENT]: {
+    current: true
   },
-  reducers: {
-    setTasks(state, {payload}) {
-      state.tasksList = payload.tasks;
-    },
-
-    setLoading(state, {payload}) {
-      console.log(payload)
-    }
+  [TASKS_LIST_TABS.UPCOMING]: {
+    current: false
+  },
+  [TASKS_LIST_TABS.ARCHIVED]: {
+    archived: true
   }
-});
+};
 
-export function loadTasks(filters) {
-  return async function (dispatch) {
-    tasksSlice.actions.setLoading(true);
+const defaultState = {
+  tasks: [],
+  listLoading: false,
+  currentTab: TASKS_LIST_TABS.CURRENT,
+  error: false,
+};
+
+export const useTasksStore = create((set, get) => ({
+  ...defaultState,
+  setTab: (tab) => set({currentTab: tab}),
+  clearState: () => set({...defaultState}),
+  loadTasksForCurrentTab: async () => {
+    const state = get();
+    set({listLoading: true, error: false});
+    const filters = tabsToFilters[state.currentTab];
 
     try {
-      const response = await getAPI().tasks.list({...filters, tz: getUserTimeZone()});
-      dispatch(tasksSlice.actions.setTasks({tasks: response.data}));
+        const { data } = await getAPI().tasks.list(filters);
+        set({tasks: data});
     } catch (e) {
-      throw e;
+        set({error: true, tasks: []});
     } finally {
-      tasksSlice.actions.setLoading(false);
+        set({listLoading: false});
     }
-  }
-}
+  },
+  createTask: async (data) => {
+    await getAPI().tasks.create(data);
 
-export const { setTasks } = tasksSlice.actions;
+    let targetTab = TASKS_LIST_TABS.CURRENT;
+    
+    if (data.period) {
+      targetTab = TASKS_LIST_TABS.CURRENT;
+    } else if (data.date) {
+      const taskDate = new Date(data.date);
+      const today = new Date();
+      
+      today.setHours(0, 0, 0, 0);
+      taskDate.setHours(0, 0, 0, 0);
+      
+      if (taskDate > today) {
+        targetTab = TASKS_LIST_TABS.UPCOMING;
+      }
+    }
 
-export default tasksSlice.reducer;
+    set({ currentTab: targetTab });
+
+    await get().loadTasksForCurrentTab();
+  },
+}));

@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,6 +15,10 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (
+    *default_headers,
+    "x-user-timezone",
+)
 
 INSTALLED_APPS = [
     'tasks',

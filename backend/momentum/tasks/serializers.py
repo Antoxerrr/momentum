@@ -33,12 +33,14 @@ class TaskSerializer(serializers.ModelSerializer):
             'penalty_task',
             'date',
             'period',
+            'archived',
             'completed',
             'expired',
             'actual_deadline',
         )
         read_only_fields = (
             'id',
+            'archived',
             'completed',
             'expired',
             'actual_deadline',

@@ -22,7 +22,7 @@ class TaskViewSet(ModelViewSet):
     filterset_class = TasksFilter
 
     def get_queryset(self):
-        user_tz = self.request.query_params.get('tz')
+        user_tz = self.request.headers['x-user-timezone']
 
         return (
             self.request.user.tasks
@@ -31,8 +31,16 @@ class TaskViewSet(ModelViewSet):
         )
 
     def _get_task(self) -> Task:
+        user_tz = self.request.headers['x-user-timezone']
+        qs = (
+            Task.objects
+            .annotate_user_today(user_tz)
+            .annotate_actual_deadline()
+            .annotate_expired()
+        )
+
         return get_object_or_404(
-            Task.objects.annotate_expired(),
+            qs,
             pk=self.kwargs[self.lookup_field]
         )
 
@@ -58,4 +66,12 @@ class TaskViewSet(ModelViewSet):
         if not task.period:
             task.archived = False
             task.save()
+        return Response()
+
+    @extend_schema(request=None, responses=None)
+    @action(methods=('PATCH',), detail=True)
+    def archive(self, request, pk):
+        task = self._get_task()
+        task.archived = True
+        task.save()
         return Response()

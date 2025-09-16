@@ -86,7 +86,7 @@ class TasksQuerySet(models.QuerySet["Task"]):
                     default=1,
                     output_field=models.IntegerField()
                 )
-            ).order_by('actual_deadline', 'period_order')
+            ).order_by('actual_deadline', 'period_order', '-created')
         )
 
     def annotate_user_today(self, user_tz):

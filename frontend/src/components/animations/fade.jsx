@@ -1,31 +1,28 @@
 import { motion, AnimatePresence } from "framer-motion";
 
-export function SlideDown({ children, show, duration }) {
+export function Fade({ children, show, duration }) {
   const animDuration = duration || 0.3;
-  
+
   return (
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
+          initial={{ opacity: 0 }}
           animate={{
-            opacity: 1, 
-            height: 'auto'
+            opacity: 1,
           }}
           exit={{
-            opacity: 0, 
-            height: 0 
+            opacity: 0,
           }}
           transition={{ 
             duration: animDuration,
-            opacity: { duration: animDuration * 1.5 },
-            height: { duration: animDuration }
+            opacity: { duration: animDuration },
           }}
-          className="w-full overflow-hidden"
+          className="w-full"
         >
           {children}
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }

@@ -1,12 +1,15 @@
 import {Form} from "@heroui/form";
 import {Input, Textarea} from "@heroui/input";
 import {useState} from "react";
-import { SlideDown } from "../animations/slide-down";
+import { SlideDown } from "@/components/animations/slide-down";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Divider } from "@heroui/divider";
 import { Button } from "@heroui/button";
-import { getAPI } from "@/core/api";
 import { addToast } from "@heroui/toast";
+import { Controller, useForm } from "react-hook-form";
+import { VALIDATION_MESSAGE_REQUIRED } from "@/core/const/common";
+import { useTasksStore } from "@/store/tasks";
+import { useShallow } from "zustand/react/shallow";
 
 const periodTabs = {
   DATE: 'DATE',
@@ -15,51 +18,40 @@ const periodTabs = {
   MONTHLY: 'MONTHLY',
 };
 
-export function TaskForm({formActive, onTaskCreated}) {
+export function TaskForm({formActive, setFormActive}) {
   const [addPenaltyTask, setAddPenaltyTask] = useState(false);
   const [selectedTaskType, setSelectedTaskType] = useState(periodTabs.DATE);
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async e => {
-    e.preventDefault();
+  const { createTask } = useTasksStore(
+    useShallow(state => ({
+      createTask: state.createTask
+    }))
+  );
+  
+  const {handleSubmit, control, reset} = useForm();
+
+  const onSubmit = async data => {
     setLoading(true);
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    const [formValid, validationErrors] = validateForm(data, selectedTaskType, addPenaltyTask);
 
-    setErrors(validationErrors);
-    if (!formValid) {
-      setLoading(false);
-      return;
+    if (selectedTaskType !== periodTabs.DATE) {
+      data.period = selectedTaskType;
+      data.date = undefined;
     }
-
-    const payload = {
-      name: data.name,
-      description: data.description || null
-    };
-
-    if (selectedTaskType === periodTabs.DATE) {
-      payload.date = data.date;
-    } else {
-      payload.period = selectedTaskType;
-    }
-
-    if (addPenaltyTask) {
-      payload.penalty_task = {
-        name: data.penaltyName,
-        description: data.penaltyDescription
-      }
+    
+    if (!addPenaltyTask) {
+      data.penalty_task = undefined;
     }
 
     try {
-      const api = getAPI();
-      await api.tasks.create(payload);
+      await createTask(data);
 
       addToast({
         title: 'Задача создана',
         color: 'success',
       });
-      onTaskCreated(payload);
+      setFormActive(false);
+      reset();
     } catch (error) {
       addToast({
         title: 'Ошибка при создании задачи',
@@ -73,20 +65,48 @@ export function TaskForm({formActive, onTaskCreated}) {
 
   return (
     <SlideDown show={formActive}>
-      <Form className="mb-5" onSubmit={onSubmit} validationErrors={errors}>
-        <Input
-          label="Имя задачи"
-          labelPlacement="inside"
+      <Form className="mb-5" onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          control={control}
           name="name"
-          size="sm"
-          type="text"
-          autoComplete="off"
-          className="flex"
+          render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+            <Input
+              ref={ref}
+              size="sm"
+              type="text"
+              autoComplete="off"
+              className="flex"
+              label="Имя задачи"
+              labelPlacement="inside"
+              isRequired
+              errorMessage={error?.message}
+              validationBehavior="aria"
+              isInvalid={invalid}
+              name={name}
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
+            />
+          )}
+          rules={{required: VALIDATION_MESSAGE_REQUIRED}}
         />
-        <Textarea 
-          label="Описание"
+        <Controller
+          control={control}
           name="description"
-          className="mt-3"
+          render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+            <Textarea
+              ref={ref}
+              className="mt-3"
+              label="Описание"
+              errorMessage={error?.message}
+              validationBehavior="aria"
+              isInvalid={invalid}
+              name={name}
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
+            />
+          )}
         />
         <Tabs className="mt-3" fullWidth={true} selectedKey={selectedTaskType} onSelectionChange={setSelectedTaskType}>
           <Tab key={periodTabs.DATE} title="Дата"></Tab>
@@ -96,8 +116,27 @@ export function TaskForm({formActive, onTaskCreated}) {
         </Tabs>
 
         <SlideDown show={selectedTaskType === periodTabs.DATE}>
-          
-          <Input type="date" name="date" label="Дата" className="mt-3"/>
+          <Controller
+            control={control}
+            name="date"
+            render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+              <Input
+                ref={ref}
+                type="date"
+                className="mt-3"
+                label="Дата"
+                isRequired
+                errorMessage={error?.message}
+                validationBehavior="aria"
+                isInvalid={invalid}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
+              />
+            )}
+            rules={{required: VALIDATION_MESSAGE_REQUIRED}}
+          />
         </SlideDown>
 
         {
@@ -118,52 +157,55 @@ export function TaskForm({formActive, onTaskCreated}) {
         }
 
         <SlideDown show={addPenaltyTask}>
-          <PenaltyTaskFields/>
+          <Controller
+            control={control}
+            name="penalty_task.name"
+            render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+              <Input
+                ref={ref}
+                size="sm"
+                type="text"
+                autoComplete="off"
+                className="flex mt-3"
+                label="Имя штрафной задачи"
+                labelPlacement="inside"
+                isRequired
+                errorMessage={error?.message}
+                validationBehavior="aria"
+                isInvalid={invalid}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
+              />
+            )}
+            rules={{required: VALIDATION_MESSAGE_REQUIRED}}
+          />
+          <Controller
+            control={control}
+            name="penalty_task.description"
+            render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+              <Textarea
+                ref={ref}
+                className="mt-3"
+                label="Описание штрафной задачи"
+                errorMessage={error?.message}
+                validationBehavior="aria"
+                isInvalid={invalid}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
+              />
+            )}
+          />
         </SlideDown>
 
-        <Button type="submit" color="primary" variant="shadow" className="w-full mt-3 shadow-md">
+        <Button type="submit" color="primary" variant="shadow" className="w-full mt-3 shadow-md" isLoading={loading}>
           Создать
         </Button>
       </Form>
       <Divider className="mb-5"/>
     </SlideDown>
   )
-}
-
-function PenaltyTaskFields() {
-  return (
-    <>
-      <Input
-        label="Имя задачи"
-        labelPlacement="inside"
-        name="penaltyName"
-        size="sm"
-        type="text"
-        autoComplete="off"
-        className="flex mt-3"
-      />
-      <Textarea 
-        label="Описание"
-        name="penaltyDescription"
-        className="mt-3"
-      />
-    </>
-  )
-}
-
-function validateForm(data, taskType, addPenaltyTask) {
-  const errors = {};
-  if (!data.name) {
-    errors.name = 'Обязательное поле';
-  }
-
-  if (taskType === periodTabs.DATE && !data.date) {
-    errors.date = "Обязательное поле";
-  }
-
-  if (addPenaltyTask && !data.penaltyName) {
-    errors.penaltyName = "Обязательное поле";
-  }
-
-  return [Object.keys(errors).length === 0, errors]
 }

@@ -1,5 +1,6 @@
 import axios from "axios";
 import {getAccessToken, purgeAccessToken} from "@/core/local-storage.js";
+import { getUserTimeZone } from "./utils";
 
 
 function getDefaultBaseUrl() {
@@ -18,6 +19,7 @@ class APIClient {
     });
     this._setupInterceptors();
     this.setAuthToken();
+    this.setTimezone();
 
     this.tasks = new TasksModule(this);
     this.users = new UsersModule(this);
@@ -36,6 +38,10 @@ class APIClient {
         return Promise.reject(error);
       }
     );
+  }
+
+  setTimezone() {
+    this.client.defaults.headers.common['X-User-Timezone'] = getUserTimeZone();
   }
 
   setAuthToken() {
@@ -93,7 +99,12 @@ class CRUDModule extends BaseAPIModule{
 }
 
 class TasksModule extends CRUDModule {
-  path = "tasks/";
+  path = 'tasks/';
+
+  async archive(id) {
+    const path = `tasks/${id}/archive/`;
+    return this.api.patch(path);
+  }
 }
 
 class UsersModule extends BaseAPIModule {
@@ -125,5 +136,6 @@ export function getAPI() {
     apiInstance = new APIClient(import.meta.env.VITE_BASE_API_URL);
   }
   apiInstance.setAuthToken();
+  apiInstance.setTimezone();
   return apiInstance;
 }

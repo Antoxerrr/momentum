@@ -1,29 +1,27 @@
 import { getAPI } from "@/core/api";
 import DefaultLayout from "@/layouts/default";
-import { loadUserAccount } from "@/store/user";
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { Button } from "@heroui/button";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { addToast } from "@heroui/toast";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useUserStore } from "@/store/user.js";
 
 
 export default function ProfilePage() {
-  const userAccount = useSelector(state => state.user.account);
+  const { account, loadUserAccount } = useUserStore();
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [timezoneChoices, setTimezoneChoices] = useState([]);
-  const [username, setUsername] = useState(userAccount.username);
-  const dispatch = useDispatch();
+  const [username, setUsername] = useState(account.username);
 
   useEffect(() => {
-    if (userAccount) {
-      setUsername(userAccount.username);
+    if (account) {
+      setUsername(account.username);
     }
-  }, [userAccount]);
+  }, [account]);
 
   useEffect(() => {
     getAPI().users.availableTimezones().then(response => {
@@ -43,7 +41,7 @@ export default function ProfilePage() {
         title: 'Данные изменены',
         color: 'success',
       })
-      dispatch(loadUserAccount())
+      await loadUserAccount();
     } catch (error) {
       error.status === 400 && setErrors(error.response.data);
     } finally {
@@ -55,7 +53,7 @@ export default function ProfilePage() {
     <DefaultLayout>
       <div className="w-full flex flex-col justify-center items-center">
         <h1 className="text-2xl font-bold mb-10">Профиль</h1>
-        <Form className="items-center w-1/3" onSubmit={onSubmit} validationErrors={errors}>
+        <Form className="items-center lg:w-1/3 md:w-1/2 w-full" onSubmit={onSubmit} validationErrors={errors}>
           <Input
             isRequired
             label="Логин"
@@ -70,7 +68,7 @@ export default function ProfilePage() {
           timezoneChoices.length > 0 &&
           <Autocomplete
             isRequired
-            defaultSelectedKey={userAccount.timezone}
+            defaultSelectedKey={account.timezone}
             label="Часовой пояс"
             name="timezone"
           >

@@ -8,31 +8,27 @@ import {
 import { link as linkStyles } from "@heroui/theme";
 import { ThemeSwitch } from "@/components/navbar/theme-switch";
 import clsx from "clsx";
-import {useDispatch, useSelector} from "react-redux";
 import {FaUser} from "react-icons/fa";
-import {loadUserAccount, logout} from "@/store/user.js";
 import {useNavigate} from "react-router-dom";
-import {getAPI} from "@/core/api.js";
 import { useEffect } from "react";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import {useUserStore} from "@/store/user.js";
 
 
 export function Navbar() {
-  const userData = useSelector(state => state.user);
-  const dispatch = useDispatch();
+  const { logout, isAuthenticated, account, loadUserAccount } = useUserStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userData.isAuthenticated) {
+    if (!isAuthenticated) {
       return;
     }
-    dispatch(loadUserAccount());
+    loadUserAccount();
   }, []);
 
   const performLogout = async () => {
-    dispatch(logout());
+    logout();
     navigate('/login');
-    getAPI().setAuthToken();
   };
 
   return (
@@ -47,7 +43,7 @@ export function Navbar() {
             <p className={`font-bold text-inherit hover:text-primary-500 transition-colors duration-200`}>MOMENTUM</p>
           </Link>
         </NavbarBrand>
-        {userData.isAuthenticated && <NavbarNavMenu/>}
+        {isAuthenticated && <NavbarNavMenu/>}
       </NavbarContent>
 
       <NavbarContent
@@ -56,7 +52,7 @@ export function Navbar() {
       >
         <NavbarItem className="flex items-center gap-3 text-default-500 h-6">
           <ThemeSwitch/>
-          {userData.isAuthenticated && <UserDropdown account={userData.account} logoutFunc={performLogout}/>}
+          {isAuthenticated && <UserDropdown account={account} logoutFunc={performLogout}/>}
           <div id="navbar-portal"></div>
         </NavbarItem>
       </NavbarContent>
@@ -120,9 +116,9 @@ function getMenuLinks() {
       href: "/",
       title: "Главная"
     },
-    {
-      href: "/statistics",
-      title: "Статистика"
-    }
+    // {
+    //   href: "/statistics",
+    //   title: "Статистика"
+    // }
   ]
 }

@@ -1,61 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit'
-import {
-  getAccessToken,
-  purgeAccessToken,
-  setAccessToken,
-} from "@/core/local-storage.js";
 import { getAPI } from '@/core/api';
+import { create } from 'zustand';
+import {getAccessToken, purgeAccessToken, setAccessToken} from "@/core/local-storage.js";
 
-export const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    isAuthenticated: false,
-    account: {},
+
+export const useUserStore = create((set, get) => ({
+  isAuthenticated: false,
+  account: {},
+
+  login: async (payload) => {
+    const api = getAPI();
+    const { data } = await api.users.login(payload);
+    setAccessToken(data.token);
+    set({ isAuthenticated: true })
+    api.setAuthToken();
   },
-  reducers: {
-    login(state, action) {
-      const {token} = action.payload;
-      state.isAuthenticated = true;
-      setAccessToken(token);
-    },
 
-    logout(state) {
-      state.account = {};
-      state.isAuthenticated = false;
-      purgeAccessToken();
-    },
+  logout: () => {
+    set({ isAuthenticated: false, account: {} })
+    purgeAccessToken();
+    getAPI().setAuthToken();
+  },
 
-    login(state, action) {
-      const {token} = action.payload;
-      state.isAuthenticated = true;
-      setAccessToken(token);
-    },
+  loadUserAccount: async () => {
+    const { data } = await getAPI().users.me();
+    set({ account: data });
+  },
 
-    setUserAccount(state, action) {
-      state.account = action.payload;
-    },
+  checkAuthentication: () => {
+    const token = getAccessToken();
 
-    checkAuthentication(state) {
-      const token = getAccessToken();
-
-      if (token) {
-        state.isAuthenticated = true;
-      } else {
-        state.username = {};
-        state.isAuthenticated = false;
-      }
+    if (token) {
+      set({ isAuthenticated: true });
+    } else {
+      set({ isAuthenticated: false, account: {} });
     }
-  }
-});
-
-
-export function loadUserAccount() {
-  return async function (dispatch) {
-    const response = await getAPI().users.me();
-    dispatch(userSlice.actions.setUserAccount(response.data));
-  }
-}
-
-export const { login, logout, checkAuthentication } = userSlice.actions;
-
-export default userSlice.reducer;
+  },
+}));
