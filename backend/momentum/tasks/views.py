@@ -74,4 +74,4 @@ class TaskViewSet(ModelViewSet):
         task = self._get_task()
         task.archived = True
         task.save()
-        return Response()
+        return Response(TaskSerializer(task).data)

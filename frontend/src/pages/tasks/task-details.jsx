@@ -10,9 +10,10 @@ import TaskDeadline from "@/components/tasks/task-deadline.jsx";
 import {VscListSelection} from "react-icons/vsc";
 import {IoIosWarning} from "react-icons/io";
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
-import {Divider} from "@heroui/divider";
 import {FaArchive, FaArrowLeft} from "react-icons/fa";
 import {Button} from "@heroui/button";
+import {addToast} from "@heroui/toast";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@heroui/modal";
 
 
 export default function TaskDetailsPage() {
@@ -34,6 +35,7 @@ function TaskDetailsContainer() {
   const navigate = useNavigate();
 
   const [taskData, setTaskData] = useState(null);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
 
   useEffect(() => {
     getAPI().tasks.retrieve(taskId).then(({ data }) => { setTaskData(data) });
@@ -134,7 +136,19 @@ function TaskDetailsContainer() {
       {!taskData.archived && (
         <CardFooter className="px-0">
           <div className="flex justify-center w-full p-3 pt-5 border-t border-default-100">
-            <Button color="warning" variant="solid" startContent={<FaArchive/>} className="px-28">
+            <ArchiveConfirmModal
+              task={taskData}
+              setTaskData={setTaskData}
+              show={showArchiveModal}
+              showChange={setShowArchiveModal}
+            />
+            <Button
+              color="warning"
+              variant="solid"
+              startContent={<FaArchive/>}
+              className="px-28"
+              onPress={() => setShowArchiveModal(true)}
+            >
               В архив
             </Button>
           </div>
@@ -153,4 +167,51 @@ function DetailsSkeleton() {
       <Skeleton className="rounded-lg h-[10rem] w-full mt-5"/>
     </>
   )
+}
+
+
+function ArchiveConfirmModal({show, showChange, task, setTaskData}) {
+  const [loading, setLoading] = useState(false);
+  const onOpenChange = v => showChange(v);
+
+  const sendRequest = async () => {
+    setLoading(true);
+
+    try {
+      const api = getAPI();
+      const { data } = await api.tasks.archive(task.id);
+      setTaskData(data);
+      showChange(false);
+    } catch {
+      addToast({
+        color: 'danger',
+        title: 'Не удалось архивировать задачу'
+      })
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Modal isOpen={show} onOpenChange={onOpenChange} size="md" placement="center">
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">Архивирование задачи</ModalHeader>
+            <ModalBody>
+              Поместить задачу в архив? Это действие нельзя отменить.
+            </ModalBody>
+            <ModalFooter className="w-full">
+              <Button color="danger" variant="solid" size="sm" loading={loading} onPress={sendRequest}>
+                В архив
+              </Button>
+              <Button color="primary" variant="solid" size="sm" onPress={onClose}>
+                Отмена
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  );
 }
