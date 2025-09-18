@@ -14,14 +14,18 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@herou
 import { useMediaQuery } from "react-responsive";
 import { getAPI } from "@/core/api";
 import { addToast } from "@heroui/toast";
+import {useNavigate} from "react-router-dom";
+import TaskTypeChip from "@/components/tasks/task-type-chip.jsx";
+import TaskDeadline from "@/components/tasks/task-deadline.jsx";
 
 
 export function TaskCard({task}) {
   const [showDetails, setShowDetails] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="w-full">
-      <Card shadow="none" isHoverable={true} isPressable={true} onPress={() => {setShowDetails(true)}} className="w-full">
+      <Card shadow="none" isHoverable={true} isPressable={true} onPress={() => {navigate(`/tasks/${task.id}`)}} className="w-full">
         <CardBody>
           <div className="flex">
             <div className={task.archived ? "hidden" : ""}>
@@ -32,14 +36,9 @@ export function TaskCard({task}) {
                 {task.name}
               </div>
               <div className="mt-2 flex justify-between">
-                <p className={`${task.expired && !task.archived ? "text-danger-400" : "text-default-400"} inline-flex items-center gap-1`}>
-                  {task.expired && !task.archived ? <BiError/> : <MdDateRange/>}
-                  {formatDate(task.actual_deadline, getUserTimeZone())}
-                </p>
+                <TaskDeadline task={task}/>
                 <div className="flex gap-3">
-                  <Chip radius="sm" color={task.period ? TASK_TYPE_COLOR_MAP[task.period] : "default"} variant="flat">
-                    {task.period ? TASK_TYPE_NAME_MAP[task.period] : "Дата"}
-                  </Chip>
+                  <TaskTypeChip task={task}/>
                 </div>
               </div>
             </div>
@@ -154,22 +153,4 @@ function ArchiveConfirmModal({show, showChange, task, onTaskArchived}) {
       </ModalContent>
     </Modal>
   );
-}
-
-
-function formatDate(dateString, timezone) {
-  const today = DateTime.fromISO(new Date().toISOString(), {zone: timezone});
-  const taskDate = DateTime.fromISO(dateString, { zone: timezone });
-
-  if (taskDate.toISODate() === today.toISODate()) {
-    return 'Сегодня';
-  }
-
-  const dateFormatted = taskDate.setLocale('ru').toLocaleString({
-    month: 'short',
-    year: 'numeric',
-    day: 'numeric',
-  }).replace(' г.', '');
-
-  return taskDate > today ? `До ${dateFormatted}` : dateFormatted;
 }

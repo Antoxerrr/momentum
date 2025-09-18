@@ -13,8 +13,10 @@ export function TasksList() {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="lg:w-1/2 md:w-2/3 w-full">
-        <TasksToolbar/>
-        <TasksContainer/>
+        <Fade show={true} duration={0.5}>
+          <TasksToolbar/>
+          <TasksContainer/>
+        </Fade>
       </div>
     </div>
   )
@@ -36,7 +38,7 @@ function TasksContainer() {
 
   if (loading) {
     return (
-      <Fade show={loading} duration={0.5}>
+      <Fade show={loading} duration={0.7}>
         <div className="flex flex-col gap-3">
           <Skeleton className="rounded-lg h-20"/>
           <Skeleton className="rounded-lg h-20"/>
