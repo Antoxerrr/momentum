@@ -5,27 +5,29 @@ export function getUserTimeZone() {
 }
 
 
-export function formatDate(dateString, timezone) {
+export function formatDate(dateString, timezone, disablePrevLabels) {
   const today = DateTime.fromISO(new Date().toISOString(), {zone: timezone});
   const taskDate = DateTime.fromISO(dateString, { zone: timezone });
 
-  if (taskDate.toISODate() === today.toISODate()) {
-    return 'Сегодня';
-  }
+  if (!disablePrevLabels) {
+    if (taskDate.toISODate() === today.toISODate()) {
+      return 'Сегодня';
+    }
 
-  const yesterday = today.minus({ days: 1 });
-  if (taskDate.toISODate() === yesterday.toISODate()) {
-    return 'Вчера';
-  }
+    const yesterday = today.minus({ days: 1 });
+    if (taskDate.toISODate() === yesterday.toISODate()) {
+      return 'Вчера';
+    }
 
-  const dayBeforeYesterday = today.minus({ days: 2 });
-  if (taskDate.toISODate() === dayBeforeYesterday.toISODate()) {
-    return 'Позавчера';
-  }
+    const dayBeforeYesterday = today.minus({ days: 2 });
+    if (taskDate.toISODate() === dayBeforeYesterday.toISODate()) {
+      return 'Позавчера';
+    }
 
-  if (taskDate < today) {
-    const daysDiff = Math.floor(today.diff(taskDate, 'days').days);
-    return `${daysDiff} ${pluralize(daysDiff, ['день', 'дня', 'дней'])} назад`;
+    if (taskDate < today) {
+      const daysDiff = Math.floor(today.diff(taskDate, 'days').days);
+      return `${daysDiff} ${pluralize(daysDiff, ['день', 'дня', 'дней'])} назад`;
+    }
   }
 
   const dateFormatted = taskDate.setLocale('ru').toLocaleString({

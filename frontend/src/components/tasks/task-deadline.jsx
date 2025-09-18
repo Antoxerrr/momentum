@@ -8,7 +8,7 @@ export default function TaskDeadline({ task }) {
     <Chip radius="sm" color={task.expired && !task.archived ? "danger" : "default"} variant="flat">
       <div className="flex justify-center items-center gap-1">
         {task.expired && !task.archived ? <BiError/> : <MdDateRange/>}
-        {formatDate(task.actual_deadline, getUserTimeZone())}
+        {formatDate(task.actual_deadline, getUserTimeZone(), task.archived)}
       </div>
     </Chip>
   );
