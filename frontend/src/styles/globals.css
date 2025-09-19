@@ -5,3 +5,17 @@
 html {
     font-family: Ubuntu, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+.with-line-through-animated {
+  text-decoration: none;
+  background-image: linear-gradient(hsl(var(--heroui-foreground-600)), hsl(var(--heroui-foreground-600)));
+  background-repeat: no-repeat;
+  background-position: center left;
+  background-size: 0 1px;
+  transition: background-size 500ms ease-in-out;
+}
+
+.with-line-through-animated--active {
+  background-size: 100% 1px;
+  color: inherit;
+}

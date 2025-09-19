@@ -76,7 +76,7 @@ class BaseAPIModule {
   }
 }
 
-class CRUDModule extends BaseAPIModule{
+class CRUDModule extends BaseAPIModule {
   async list(params) {
     return await this.api.get(this.path, params);
   }
@@ -104,6 +104,16 @@ class TasksModule extends CRUDModule {
   async archive(id) {
     const path = `tasks/${id}/archive/`;
     return this.api.patch(path);
+  }
+
+  async complete(id) {
+    const path = `tasks/${id}/complete/`;
+    return this.api.post(path);
+  }
+
+  async undoComplete(id) {
+    const path = `tasks/${id}/undo_complete/`;
+    return this.api.post(path);
   }
 }
 

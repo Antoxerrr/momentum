@@ -30,48 +30,37 @@ class TaskViewSet(ModelViewSet):
             .annotate_actual_state()
         )
 
-    def _get_task(self) -> Task:
-        user_tz = self.request.headers['x-user-timezone']
-        qs = (
-            Task.objects
-            .annotate_user_today(user_tz)
-            .annotate_actual_deadline()
-            .annotate_expired()
-        )
-
-        return get_object_or_404(
-            qs,
-            pk=self.kwargs[self.lookup_field]
-        )
-
     @atomic
     @extend_schema(request=None, responses=None)
     @action(methods=('POST',), detail=True)
     def complete(self, request, pk):
-        task = self._get_task()
+        task = self.get_object()
         task.create_completion()
         if not task.period:
             task.archived = True
             task.save()
-        return Response()
+        return self._fresh_object_response()
 
     @atomic
     @extend_schema(request=None, responses=None)
     @action(methods=('POST',), detail=True)
     def undo_complete(self, request, pk):
-        task = self._get_task()
+        task = self.get_object()
         TaskCompletion.objects.filter(
             task=task
         ).order_by('-created').first().delete()
         if not task.period:
             task.archived = False
             task.save()
-        return Response()
+        return self._fresh_object_response()
 
     @extend_schema(request=None, responses=None)
     @action(methods=('PATCH',), detail=True)
     def archive(self, request, pk):
-        task = self._get_task()
+        task = self.get_object()
         task.archived = True
         task.save()
-        return Response(TaskSerializer(task).data)
+        return self._fresh_object_response()
+
+    def _fresh_object_response(self):
+        return Response(TaskSerializer(self.get_object()).data)

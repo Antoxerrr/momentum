@@ -14,8 +14,10 @@ import {FaArchive, FaArrowLeft} from "react-icons/fa";
 import {Button} from "@heroui/button";
 import {addToast} from "@heroui/toast";
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@heroui/modal";
+import TaskCheckbox from "@/components/tasks/task-checkbox.jsx";
 
 
+// TODO: Декомпозировать
 export default function TaskDetailsPage() {
   return (
     <DefaultLayout>
@@ -35,11 +37,17 @@ function TaskDetailsContainer() {
   const navigate = useNavigate();
 
   const [taskData, setTaskData] = useState(null);
+  const [taskCompleted, setTaskCompleted] = useState(false);
   const [showArchiveModal, setShowArchiveModal] = useState(false);
 
   useEffect(() => {
     getAPI().tasks.retrieve(taskId).then(({ data }) => { setTaskData(data) });
   }, []);
+
+  const taskOnCompletedChange = (isCompleted, data) => {
+    setTaskCompleted(isCompleted);
+    // TODO: мб добавить больше анимаций и вывода инфы
+  };
 
   if (!taskData) {
     return (
@@ -73,11 +81,13 @@ function TaskDetailsContainer() {
 
         <div className="p-6 pb-0 w-full">
           <div className="flex gap-2">
-            <div className="pt-[7px]">
-              <Checkbox radius="full" size="lg" isDisabled={taskData.archived}></Checkbox>
-            </div>
+            <TaskCheckbox className="pt-[7px]" task={taskData} onCompletedChange={taskOnCompletedChange}/>
             <h1 className="text-2xl font-medium py-1 px-2 hover:bg-foreground-200 rounded-md  hover:duration-300 transition-background ms-[-12px]">
-              { taskData.name }
+              <span
+                className={taskCompleted ? "with-line-through-animated with-line-through-animated--active" : "with-line-through-animated"}
+              >
+                {taskData.name}
+              </span>
             </h1>
           </div>
 
@@ -178,8 +188,7 @@ function ArchiveConfirmModal({show, showChange, task, setTaskData}) {
     setLoading(true);
 
     try {
-      const api = getAPI();
-      const { data } = await api.tasks.archive(task.id);
+      const { data } = await getAPI().tasks.archive(task.id);
       setTaskData(data);
       showChange(false);
     } catch {
