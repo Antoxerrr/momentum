@@ -62,4 +62,7 @@ export const useTasksStore = create((set, get) => ({
 
     await get().loadTasksForCurrentTab();
   },
+  editTask: async (taskId, data) => {
+    await getAPI().tasks.update(taskId, data);
+  },
 }));

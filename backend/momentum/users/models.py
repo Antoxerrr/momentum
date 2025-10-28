@@ -14,7 +14,3 @@ class User(AbstractUser):
         choices=TIMEZONE_CHOICES,
         default=DEFAULT_USER_TIMEZONE
     )
-
-    def get_today(self) -> datetime.date:
-        timezone = ZoneInfo(self.timezone)
-        return datetime.datetime.now(timezone).date()

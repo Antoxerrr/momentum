@@ -8,6 +8,7 @@ import ProfilePage from "@/pages/profile";
 import {useUserStore} from "@/store/user.js";
 import {useShallow} from "zustand/react/shallow";
 import TaskDetailsPage from "@/pages/tasks/task-details.jsx";
+import TaskEditPage from "@/pages/tasks/task-edit.jsx";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
 
         <Route element={<TasksPage/>} path="/tasks"/>
         <Route element={<TaskDetailsPage/>} path="/tasks/:taskId"/>
+        <Route element={<TaskEditPage/>} path="/tasks/:taskId/edit"/>
 
         <Route element={<StatisticsPage/>} path="/statistics"/>
         <Route element={<ProfilePage/>} path="/profile"/>

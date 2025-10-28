@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { GoPlus } from "react-icons/go";
 import { RxCross2 } from "react-icons/rx";
-import { TaskForm } from "./task-form";
+import { TaskForm } from "../task-form.jsx";
 import { Tab, Tabs } from "@heroui/tabs";
 import { FaArchive } from "react-icons/fa";
 import { TbClockPlay } from "react-icons/tb";
 import { MdDownloading } from "react-icons/md";
 import { Select, SelectItem } from "@heroui/select";
-import { TASKS_LIST_TABS } from "@/core/const/tasks";
-import { useTasksStore } from "@/store/tasks";
+import { TASKS_LIST_TABS } from "@/core/const/tasks.js";
+import { useTasksStore } from "@/store/tasks.js";
 import { useShallow } from "zustand/react/shallow";
+import {SlideDown} from "@/components/animations/slide-down.jsx";
+import {Divider} from "@heroui/divider";
 
 const tabsIcons = {
   [TASKS_LIST_TABS.CURRENT]: <TbClockPlay/>,
@@ -27,10 +29,12 @@ export function TasksToolbar() {
         formActive={formActive}
         setFormActive={setFormActive}
       />
-      <TaskForm
-        formActive={formActive}
-        setFormActive={setFormActive}
-      />
+      <SlideDown show={formActive}>
+        <TaskForm
+          setFormActive={setFormActive}
+        />
+        <Divider className="mb-5"/>
+      </SlideDown>
     </div>
   )
 }

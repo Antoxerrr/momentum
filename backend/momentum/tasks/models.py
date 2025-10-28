@@ -213,7 +213,7 @@ class Task(BaseModel):
 
         return TaskCompletion.objects.create(
             task=self,
-            date=self.user.get_today(),
+            date=self.user_today,
             expired=self.expired
         )
 

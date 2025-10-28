@@ -1,5 +1,5 @@
 import DefaultLayout from "@/layouts/default";
-import {TasksList} from "@/components/tasks/tasks-list.jsx";
+import {TasksList} from "@/components/tasks/list/tasks-list.jsx";
 
 export default function TasksPage() {
   return (
