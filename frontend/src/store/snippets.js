@@ -2,7 +2,8 @@ import {create} from "zustand";
 import {getAPI} from "@/core/api.js";
 import {debounce} from "@/core/utils.js";
 
-export const useSnippetsStore = create((set, get) => ({
+
+const defaultState = {
   listLoading: false,
   listLoadingError: false,
 
@@ -11,6 +12,14 @@ export const useSnippetsStore = create((set, get) => ({
 
   selectedCategories: [],
   queryString: '',
+};
+
+export const useSnippetsStore = create((set, get) => ({
+  ...defaultState,
+
+  clearState: () => {
+    set(defaultState);
+  },
 
   setQueryString: query => {
     set({queryString: query});
