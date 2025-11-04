@@ -16,7 +16,7 @@ class SnippetsViewSet(ModelViewSet):
     search_fields = ['text']
 
     def get_queryset(self):
-        return self.request.user.snippets.order_by('-created')
+        return self.request.user.snippets.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

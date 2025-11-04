@@ -22,6 +22,7 @@ class SnippetsCategory(BaseModel, MPTTModel):
     class Meta:
         verbose_name = 'Категория сниппетов'
         verbose_name_plural = 'Категории сниппетов'
+        ordering = ('-created',)
 
     def __str__(self):
         return self.name
@@ -44,6 +45,7 @@ class Snippet(BaseModel):
         verbose_name = 'Сниппет'
         verbose_name_plural = 'Сниппеты'
         default_related_name = 'snippets'
+        ordering = ('-created',)
 
     def __str__(self):
         return f'Сниппет <{self.pk}>'
