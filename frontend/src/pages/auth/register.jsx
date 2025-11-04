@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {addToast} from "@heroui/toast";
 import { getAPI } from "@/core/api.js";
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+import {setDocumentTitle} from "@/core/utils.js";
 
 
 export default function RegisterPage() {
@@ -20,6 +21,8 @@ export default function RegisterPage() {
     getAPI().users.availableTimezones().then(response => {
       setTimezoneChoices(response.data.timezones);
     });
+
+    setDocumentTitle("Регистрация");
   }, []);
 
   const onSubmit = async e => {

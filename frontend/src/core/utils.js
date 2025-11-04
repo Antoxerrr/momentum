@@ -67,3 +67,8 @@ export function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
+
+
+export function setDocumentTitle(title) {
+  document.title = `${title} | Momentum`
+}

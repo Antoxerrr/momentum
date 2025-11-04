@@ -7,6 +7,7 @@ import { Input } from "@heroui/input";
 import { addToast } from "@heroui/toast";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/user.js";
+import {setDocumentTitle} from "@/core/utils.js";
 
 
 export default function ProfilePage() {
@@ -27,6 +28,7 @@ export default function ProfilePage() {
     getAPI().users.availableTimezones().then(response => {
       setTimezoneChoices(response.data.timezones);
     });
+    setDocumentTitle("Профиль");
   }, []);
 
   const onSubmit = async e => {

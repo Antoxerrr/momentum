@@ -22,3 +22,8 @@ html {
   background-size: 100% 1px;
   color: inherit;
 }
+
+/* TODO: deal with page jumping on scrollbar appear/disappear */
+body {
+  overflow-y: scroll;
+}

@@ -6,10 +6,9 @@ import {
   NavbarItem,
 } from "@heroui/navbar";
 import { link as linkStyles } from "@heroui/theme";
-import { ThemeSwitch } from "@/components/navbar/theme-switch";
 import clsx from "clsx";
 import {FaUser} from "react-icons/fa";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import { useEffect } from "react";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import {useUserStore} from "@/store/user.js";
@@ -18,6 +17,7 @@ import {useUserStore} from "@/store/user.js";
 export function Navbar() {
   const { logout, isAuthenticated, account, loadUserAccount } = useUserStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -43,6 +43,9 @@ export function Navbar() {
             <p className={`font-bold text-inherit hover:text-primary-500 transition-colors duration-200`}>MOMENTUM</p>
           </Link>
         </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent justify="center">
         {isAuthenticated && <NavbarNavMenu/>}
       </NavbarContent>
 
@@ -51,7 +54,6 @@ export function Navbar() {
         justify="end"
       >
         <NavbarItem className="flex items-center gap-3 text-default-500 h-6">
-          <ThemeSwitch/>
           {isAuthenticated && <UserDropdown account={account} logoutFunc={performLogout}/>}
           <div id="navbar-portal"></div>
         </NavbarItem>
@@ -92,13 +94,17 @@ function NavbarNavMenu() {
     <div className="flex gap-4 justify-start ml-2">
       {getMenuLinks().map(item => {
         return (
-          <NavbarItem key={item.href}>
+          <NavbarItem
+            key={item.href}
+            isActive={location.pathname.startsWith(item.href)}
+            className="data-[active=true]:underline"
+          >
             <Link
-              className={clsx(
-                linkStyles({color: "foreground"}),
-                "data-[active=true]:text-danger data-[active=true]:font-medium",
-              )}
-              color="foreground"
+              className="font-medium text-[0.95rem] text-foreground tracking-tight"
+              style={{
+                textDecorationLine: 'inherit',
+                textUnderlineOffset: '10px'
+              }}
               href={item.href}
             >
               {item.title}
@@ -119,10 +125,6 @@ function getMenuLinks() {
     {
       href: "/snippets",
       title: "Сниппеты"
-    }
-    // {
-    //   href: "/statistics",
-    //   title: "Статистика"
-    // }
+    },
   ]
 }

@@ -3,7 +3,6 @@ import TasksPage from "@/pages/tasks/tasks.jsx";
 import LoginPage from "@/pages/auth/login.jsx";
 import RegisterPage from "@/pages/auth/register.jsx";
 import {ProtectedRoute} from "@/components/routes.jsx";
-import StatisticsPage from "@/pages/statistics.jsx";
 import ProfilePage from "@/pages/profile";
 import {useUserStore} from "@/store/user.js";
 import {useShallow} from "zustand/react/shallow";
@@ -31,7 +30,6 @@ function App() {
         <Route element={<TaskDetailsPage/>} path="/tasks/:taskId"/>
         <Route element={<TaskEditPage/>} path="/tasks/:taskId/edit"/>
 
-        <Route element={<StatisticsPage/>} path="/statistics"/>
         <Route element={<ProfilePage/>} path="/profile"/>
 
         <Route element={<SnippetsListPage/>} path="/snippets"/>

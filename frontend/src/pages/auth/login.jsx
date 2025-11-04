@@ -3,12 +3,17 @@ import {Link} from "@heroui/link";
 import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import AuthForm from "@/components/auth/auth-form.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useShallow} from "zustand/react/shallow";
 import {useUserStore} from "@/store/user.js";
+import {setDocumentTitle} from "@/core/utils.js";
 
 export default function LoginPage() {
+  useEffect(() => {
+    setDocumentTitle("Авторизация");
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [isWrongCredentials, setIsWrongCredentials] = useState(false);
   const { login } = useUserStore(

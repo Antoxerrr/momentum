@@ -5,6 +5,7 @@ import {TaskForm} from "@/components/tasks/task-form.jsx";
 import {useEffect, useState} from "react";
 import {getAPI} from "@/core/api.js";
 import {useNavigate, useParams} from "react-router-dom";
+import {setDocumentTitle} from "@/core/utils.js";
 
 export default function TaskEditPage() {
   const { taskId } = useParams();
@@ -12,6 +13,7 @@ export default function TaskEditPage() {
 
   useEffect(() => {
     getAPI().tasks.retrieve(taskId).then(({ data }) => { setTaskData(data) });
+    setDocumentTitle("Редактирование задачи");
   }, []);
 
   return (
