@@ -16,6 +16,9 @@ class APIClient {
   constructor(baseUrl) {
     this.client = axios.create({
       baseURL: baseUrl || getDefaultBaseUrl(),
+      paramsSerializer: {
+        indexes: null
+      }
     });
     this._setupInterceptors();
     this.setAuthToken();
@@ -23,6 +26,8 @@ class APIClient {
 
     this.tasks = new TasksModule(this);
     this.users = new UsersModule(this);
+    this.snippets = new SnippetsModule(this);
+    this.snippetsCategories = new SnippetsCategoriesModule(this);
   }
 
   _setupInterceptors() {
@@ -97,6 +102,17 @@ class CRUDModule extends BaseAPIModule {
     return await this.api.delete(detailedPath(this.path, id));
   }
 }
+
+
+class SnippetsModule extends CRUDModule {
+  path = 'snippets/';
+}
+
+
+class SnippetsCategoriesModule extends CRUDModule {
+  path = 'snippets/categories/';
+}
+
 
 class TasksModule extends CRUDModule {
   path = 'tasks/';

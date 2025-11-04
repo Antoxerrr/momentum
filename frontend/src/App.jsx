@@ -9,6 +9,7 @@ import {useUserStore} from "@/store/user.js";
 import {useShallow} from "zustand/react/shallow";
 import TaskDetailsPage from "@/pages/tasks/task-details.jsx";
 import TaskEditPage from "@/pages/tasks/task-edit.jsx";
+import SnippetsListPage from "@/pages/snippets/snippets-list.jsx";
 
 
 function App() {
@@ -32,6 +33,8 @@ function App() {
 
         <Route element={<StatisticsPage/>} path="/statistics"/>
         <Route element={<ProfilePage/>} path="/profile"/>
+
+        <Route element={<SnippetsListPage/>} path="/snippets"/>
       </Route>
       <Route element={<ProtectedRoute isAllowed={!isAuthenticated} redirectPath="/"/>}>
         <Route element={<LoginPage/>} path="/login"/>

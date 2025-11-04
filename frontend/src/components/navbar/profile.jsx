@@ -2,32 +2,10 @@ import { getAPI } from "@/core/api";
 import { Button } from "@heroui/button"
 import { Form } from "@heroui/form"
 import { Input } from "@heroui/input";
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalContent } from "@heroui/modal"
 import { Select, SelectItem } from "@heroui/select";
 import { addToast } from "@heroui/toast";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
-export function UserProfileModal({isOpen, onClose}) {
-  return (
-    <Modal isOpen={isOpen} size="md" onClose={onClose}>
-      <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">Профиль</ModalHeader>
-        <ModalBody>
-          <UserProfileForm onClose={onClose}/>
-        </ModalBody>
-        {/* {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">Профиль</ModalHeader>
-            <ModalBody>
-              <UserProfileForm onClose={onClose}/>
-            </ModalBody>
-          </>
-        )} */}
-      </ModalContent>
-    </Modal>
-  )
-}
 
 function UserProfileForm({onClose}) {
   const [errors, setErrors] = useState({});

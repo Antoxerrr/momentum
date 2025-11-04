@@ -1,0 +1,55 @@
+.markdown-content {
+  line-height: 1.7;
+  /*white-space: pre-wrap;*/
+
+  .hljs {
+    border-radius: 5px;
+  }
+
+  ul, ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+
+  a {
+    color: revert;
+    text-decoration: revert;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-size: revert;
+    font-weight: revert;
+  }
+
+  code:not(.hljs) {
+    color: hsl(var(--heroui-default-600));
+    background: hsl(var(--heroui-default-200));
+    padding: 3px 5px;
+    border-radius: 5px;
+    margin: 0 1px;
+  }
+
+  p:not(:last-child) {
+    margin-bottom: .90rem;
+  }
+
+  p:not(:first-child) {
+    margin-top: .90rem;
+  }
+}
+
+.snippet-controls {
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .7rem;
+  transition: opacity 200ms ease-in-out;
+}
+
+.snippet-card:hover {
+  .snippet-controls {
+    opacity: 1;
+  }
+}

@@ -5,6 +5,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 api_urls = [
     path('users/', include('users.urls')),
     path('tasks/', include('tasks.urls')),
+    path('snippets/', include('snippets.urls')),
 ]
 
 docs_urls = [

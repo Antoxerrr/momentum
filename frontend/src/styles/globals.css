@@ -1,9 +1,12 @@
+@import 'highlight.js/styles/atom-one-dark.css';
+@import "snippets.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
-    font-family: Ubuntu, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: Ubuntu, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .with-line-through-animated {

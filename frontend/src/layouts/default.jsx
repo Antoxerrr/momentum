@@ -5,7 +5,7 @@ export default function DefaultLayout({children}) {
   return (
     <BaseLayout>
       <Navbar withNav={true}/>
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4 md:pt-12">
+      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4 md:pt-12 pb-6">
         {children}
       </main>
     </BaseLayout>

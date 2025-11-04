@@ -113,9 +113,13 @@ function NavbarNavMenu() {
 function getMenuLinks() {
   return [
     {
-      href: "/",
-      title: "Главная"
+      href: "/tasks",
+      title: "Список дел"
     },
+    {
+      href: "/snippets",
+      title: "Сниппеты"
+    }
     // {
     //   href: "/statistics",
     //   title: "Статистика"
