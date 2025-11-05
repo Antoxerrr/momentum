@@ -126,5 +126,9 @@ function getMenuLinks() {
       href: "/snippets",
       title: "Сниппеты"
     },
+    {
+      href: "/tracker/projects",
+      title: "Трекер"
+    },
   ]
 }

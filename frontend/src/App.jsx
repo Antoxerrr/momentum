@@ -9,6 +9,7 @@ import {useShallow} from "zustand/react/shallow";
 import TaskDetailsPage from "@/pages/tasks/task-details.jsx";
 import TaskEditPage from "@/pages/tasks/task-edit.jsx";
 import SnippetsListPage from "@/pages/snippets/snippets-list.jsx";
+import TrackerProjectsListPage from "@/pages/tracker/projects-list.jsx";
 
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
         <Route element={<ProfilePage/>} path="/profile"/>
 
         <Route element={<SnippetsListPage/>} path="/snippets"/>
+
+        <Route element={<TrackerProjectsListPage/>} path="/tracker/projects"/>
       </Route>
       <Route element={<ProtectedRoute isAllowed={!isAuthenticated} redirectPath="/"/>}>
         <Route element={<LoginPage/>} path="/login"/>

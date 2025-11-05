@@ -21,6 +21,7 @@ CORS_ALLOW_HEADERS = (
 )
 
 INSTALLED_APPS = [
+    'tracker',
     'snippets',
     'tasks',
     'users',
