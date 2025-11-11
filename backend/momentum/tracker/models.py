@@ -45,3 +45,8 @@ class TrackerTask(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class TrackerTaskTag(BaseModel):
+    name = models.CharField('<UNK>', max_length=128)
+    color = ...
