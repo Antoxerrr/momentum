@@ -1,6 +1,5 @@
 import {Button} from "@heroui/button";
 import {useSnippetsStore} from "@/store/snippets.js";
-import {useShallow} from "zustand/react/shallow";
 
 export default function SnippetCategoryItem({ snippetCategory }) {
   const switchCategory = useSnippetsStore(state => state.switchCategory);

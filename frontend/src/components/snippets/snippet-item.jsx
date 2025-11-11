@@ -25,7 +25,7 @@ export default function SnippetItem({snippet}) {
   );
 
   const [copied, setCopied] = useState(false);
-  
+
   const copySnippet = () => {
     const clipboardData =
         event.clipboardData ||
