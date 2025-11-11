@@ -10,8 +10,6 @@ export default function SnippetsList({ className }) {
   const snippets = useSnippetsStore(state => state.snippets);
   const loadSnippets = useSnippetsStore(state => state.loadSnippets);
 
-  console.log("Это надо добавить")
-
   useEffect(() => {
     clearState();
     loadSnippets();
