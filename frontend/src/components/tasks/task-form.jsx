@@ -50,7 +50,7 @@ export function TaskForm({setFormActive, taskData}) {
       data.period = selectedTaskType;
       data.date = undefined;
     }
-    
+
     if (!addPenaltyTask) {
       data.penalty_task = undefined;
     }
