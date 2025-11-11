@@ -21,7 +21,6 @@ class TaskViewSet(ModelViewSet):
     filterset_class = TasksFilter
 
     def get_queryset(self):
-        print(1)
         user_tz = self.request.headers['x-user-timezone']
 
         return (
