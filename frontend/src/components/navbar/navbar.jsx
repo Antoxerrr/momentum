@@ -5,13 +5,11 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@heroui/navbar";
-import { link as linkStyles } from "@heroui/theme";
-import clsx from "clsx";
-import {FaUser} from "react-icons/fa";
 import {useLocation, useNavigate} from "react-router-dom";
 import { useEffect } from "react";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import {useUserStore} from "@/store/user.js";
+import UserAvatar from "@/components/user-avatar";
 
 
 export function Navbar() {
@@ -68,7 +66,7 @@ function UserDropdown({logoutFunc, account}) {
     <Dropdown>
       <DropdownTrigger>
         <div>
-          <FaUser className={`cursor-pointer`}/>
+          <UserAvatar username={account.username} className="cursor-pointer"/>
         </div>
       </DropdownTrigger>
       <DropdownMenu
