@@ -63,7 +63,7 @@ export function Navbar() {
 
 function UserDropdown({logoutFunc, account}) {
   return (
-    <Dropdown>
+    <Dropdown shouldBlockScroll={false}>
       <DropdownTrigger>
         <div>
           <UserAvatar username={account.username} className="cursor-pointer"/>

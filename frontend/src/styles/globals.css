@@ -1,5 +1,6 @@
 @import 'highlight.js/styles/atom-one-dark.css';
 @import "./snippets.css";
+@import "./scrollbar.css";
 
 @import "tailwindcss";
 
@@ -23,7 +24,7 @@ html {
   color: inherit;
 }
 
-/* TODO: deal with page jumping on scrollbar appear/disappear */
+html,
 body {
-  overflow-y: scroll;
+  scrollbar-gutter: stable both-edges;
 }
