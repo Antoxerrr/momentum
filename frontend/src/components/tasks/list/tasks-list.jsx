@@ -5,7 +5,7 @@ import { useTasksStore } from "@/store/tasks.js";
 import { TbServerOff } from "react-icons/tb";
 import { IoMdDoneAll } from "react-icons/io";
 import { useShallow } from 'zustand/react/shallow';
-import { Skeleton } from "@heroui/skeleton";
+import { Skeleton } from "@heroui/react";
 import { Fade } from "@/components/animations/fade.jsx";
 
 

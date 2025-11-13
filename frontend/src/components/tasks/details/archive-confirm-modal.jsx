@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {getAPI} from "@/core/api.js";
-import {addToast} from "@heroui/toast";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@heroui/modal";
-import {Button} from "@heroui/button";
+import {addToast} from "@heroui/react";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@heroui/react";
+import {Button} from "@heroui/react";
 
 
 export default function ArchiveConfirmModal({show, showChange, task, setTaskData}) {

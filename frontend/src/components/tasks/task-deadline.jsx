@@ -1,7 +1,7 @@
 import {BiError} from "react-icons/bi";
 import {MdDateRange} from "react-icons/md";
 import {formatDate, getUserTimeZone} from "@/core/utils.js";
-import {Chip} from "@heroui/chip";
+import {Chip} from "@heroui/react";
 
 export default function TaskDeadline({ task }) {
   return (

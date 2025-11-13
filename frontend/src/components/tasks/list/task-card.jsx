@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
+import { Card, CardBody } from "@heroui/react";
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import TaskTypeChip from "@/components/tasks/task-type-chip.jsx";

@@ -1,5 +1,5 @@
 import {TASK_TYPE_COLOR_MAP, TASK_TYPE_NAME_MAP} from "@/core/const/tasks.js";
-import {Chip} from "@heroui/chip";
+import { Chip } from "@heroui/react";
 
 export default function TaskTypeChip({ task }) {
   return (

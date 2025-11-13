@@ -1,5 +1,5 @@
-import {Card, CardBody} from "@heroui/card";
-import {Divider} from "@heroui/divider";
+import {Card, CardBody} from "@heroui/react";
+import {Divider} from "@heroui/react";
 import 'highlight.js/styles/github.css';
 import {Marked} from "marked";
 import {markedHighlight} from "marked-highlight";
@@ -8,10 +8,10 @@ import {FaCheck, FaTrash} from "react-icons/fa";
 import {IoCopyOutline} from "react-icons/io5";
 import {useState} from "react";
 import {formatMarkdown, highlightMarkdown} from "@/core/markdown.js";
-import {Button} from "@heroui/button";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@heroui/modal";
+import {Button} from "@heroui/react";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@heroui/react";
 import {getAPI} from "@/core/api.js";
-import {addToast} from "@heroui/toast";
+import {addToast} from "@heroui/react";
 import {useSnippetsStore} from "@/store/snippets.js";
 import SnippetForm from "@/components/snippets/snippet-form.jsx";
 

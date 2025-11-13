@@ -1,15 +1,15 @@
-import {Form} from "@heroui/form";
-import {Textarea} from "@heroui/input";
+import {Form} from "@heroui/react";
+import {Textarea} from "@heroui/react";
 import {Controller, useForm} from "react-hook-form";
 import {Marked} from "marked";
 import {markedHighlight} from "marked-highlight";
 import {formatMarkdown, highlightMarkdown} from "@/core/markdown.js";
 import {useSnippetsStore} from "@/store/snippets.js";
 import {useEffect, useState} from "react";
-import {Select, SelectItem} from "@heroui/select";
-import {Button} from "@heroui/button";
+import {Select, SelectItem} from "@heroui/react";
+import {Button} from "@heroui/react";
 import {getAPI} from "@/core/api.js";
-import {addToast} from "@heroui/toast";
+import {addToast} from "@heroui/react";
 import {useShallow} from "zustand/react/shallow";
 
 export default function SnippetForm({ closeForm, snippet = null }) {

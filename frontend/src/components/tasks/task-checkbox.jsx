@@ -1,4 +1,4 @@
-import {Checkbox} from "@heroui/checkbox";
+import {Checkbox} from "@heroui/react";
 import {useState} from "react";
 import {getAPI} from "@/core/api.js";
 

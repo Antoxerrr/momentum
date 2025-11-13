@@ -1,4 +1,4 @@
-import {Input} from "@heroui/input";
+import {Input} from "@heroui/react";
 import {useSnippetsStore} from "@/store/snippets.js";
 
 export default function SnippetSearchField() {

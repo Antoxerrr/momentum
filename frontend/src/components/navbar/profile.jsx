@@ -1,9 +1,9 @@
 import { getAPI } from "@/core/api";
-import { Button } from "@heroui/button"
-import { Form } from "@heroui/form"
-import { Input } from "@heroui/input";
-import { Select, SelectItem } from "@heroui/select";
-import { addToast } from "@heroui/toast";
+import { Button } from "@heroui/react"
+import { Form } from "@heroui/react"
+import { Input } from "@heroui/react";
+import { Select, SelectItem } from "@heroui/react";
+import { addToast } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -44,7 +44,7 @@ function UserProfileForm({onClose}) {
       setLoading(false);
     }
   };
-  
+
   return (
     <Form className="w-full items-center" onSubmit={onSubmit} validationErrors={errors}>
       <Input

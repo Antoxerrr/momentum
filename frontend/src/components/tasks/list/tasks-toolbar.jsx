@@ -2,16 +2,16 @@ import { useState } from "react";
 import { GoPlus } from "react-icons/go";
 import { RxCross2 } from "react-icons/rx";
 import { TaskForm } from "../task-form.jsx";
-import { Tab, Tabs } from "@heroui/tabs";
+import { Tab, Tabs } from "@heroui/react";
 import { FaArchive } from "react-icons/fa";
 import { TbClockPlay } from "react-icons/tb";
 import { MdDownloading } from "react-icons/md";
-import { Select, SelectItem } from "@heroui/select";
+import { Select, SelectItem } from "@heroui/react";
 import { TASKS_LIST_TABS } from "@/core/const/tasks.js";
 import { useTasksStore } from "@/store/tasks.js";
 import { useShallow } from "zustand/react/shallow";
 import {SlideDown} from "@/components/animations/slide-down.jsx";
-import {Divider} from "@heroui/divider";
+import {Divider} from "@heroui/react";
 
 const tabsIcons = {
   [TASKS_LIST_TABS.CURRENT]: <TbClockPlay/>,
@@ -25,7 +25,7 @@ export function TasksToolbar() {
 
   return (
     <div>
-      <ToolbarControls 
+      <ToolbarControls
         formActive={formActive}
         setFormActive={setFormActive}
       />
@@ -51,7 +51,7 @@ function ToolbarControls({formActive, setFormActive}) {
       </div>
 
       <div className="flex flex-row-reverse items-center gap-2 select-none">
-        {formActive ? 
+        {formActive ?
         <RxCross2 className="text-2xl cursor-pointer transition-colors duration-200 hover:text-danger-400 me-1" onClick={hideForm}/> :
         <GoPlus className="text-3xl cursor-pointer hover:text-primary-500 transition-colors duration-200" onClick={showForm}/>}
       </div>
@@ -103,7 +103,7 @@ function TaskTabs() {
           Архив
         </SelectItem>
       </Select>
-      <Tabs 
+      <Tabs
         variant="light"
         selectedKey={currentTab}
         onSelectionChange={switchTab}

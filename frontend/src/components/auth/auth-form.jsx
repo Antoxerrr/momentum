@@ -1,6 +1,6 @@
-import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
-import {Form} from "@heroui/form";
-import {Divider} from "@heroui/divider";
+import {Card, CardBody, CardFooter, CardHeader} from "@heroui/react";
+import {Form} from "@heroui/react";
+import {Divider} from "@heroui/react";
 
 export default function AuthForm({title, children, footer, onSubmit, errors}) {
   return (

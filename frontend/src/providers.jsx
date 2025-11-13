@@ -1,6 +1,6 @@
-import { HeroUIProvider } from "@heroui/system";
+import { HeroUIProvider } from "@heroui/react";
 import { useHref, useNavigate } from "react-router-dom";
-import {ToastProvider} from "@heroui/toast";
+import {ToastProvider} from "@heroui/react";
 
 
 export function Providers({ children }) {

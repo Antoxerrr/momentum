@@ -1,4 +1,4 @@
-import {Button} from "@heroui/button";
+import {Button} from "@heroui/react";
 import {useSnippetsStore} from "@/store/snippets.js";
 
 export default function SnippetCategoryItem({ snippetCategory }) {

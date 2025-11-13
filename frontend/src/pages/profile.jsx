@@ -1,10 +1,10 @@
 import { getAPI } from "@/core/api";
 import DefaultLayout from "@/layouts/default";
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
-import { Button } from "@heroui/button";
-import { Form } from "@heroui/form";
-import { Input } from "@heroui/input";
-import { addToast } from "@heroui/toast";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { Button } from "@heroui/react";
+import { Form } from "@heroui/react";
+import { Input } from "@heroui/react";
+import { addToast } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/user.js";
 import {setDocumentTitle} from "@/core/utils.js";

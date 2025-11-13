@@ -1,4 +1,4 @@
-import {Spinner} from "@heroui/spinner";
+import { Spinner } from "@heroui/react";
 
 export default function LoadingSpinner() {
   const SPINNER_SIZE_CLASSES = 'w-16 h-16';

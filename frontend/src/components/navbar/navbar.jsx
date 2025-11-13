@@ -1,13 +1,13 @@
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
 import {
   Navbar as HeroUINavbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@heroui/navbar";
+} from "@heroui/react";
 import {useLocation, useNavigate} from "react-router-dom";
 import { useEffect } from "react";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import {useUserStore} from "@/store/user.js";
 import UserAvatar from "@/components/user-avatar";
 

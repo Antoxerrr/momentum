@@ -2,7 +2,7 @@ import DefaultLayout from "@/layouts/default.jsx";
 import {Fade} from "@/components/animations/fade.jsx";
 import {GoPlus} from "react-icons/go";
 import {useEffect, useState} from "react";
-import {Button} from "@heroui/button";
+import {Button} from "@heroui/react";
 import {SlideDown} from "@/components/animations/slide-down.jsx";
 import SnippetForm from "@/components/snippets/snippet-form.jsx";
 import SnippetCategoryList from "@/components/snippets/snippet-category-list.jsx";

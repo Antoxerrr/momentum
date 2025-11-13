@@ -1,13 +1,13 @@
 import AuthLayout from "@/layouts/auth.jsx";
-import {Link} from "@heroui/link";
-import {Input} from "@heroui/input";
-import {Button} from "@heroui/button";
+import {Link} from "@heroui/react";
+import {Input} from "@heroui/react";
+import {Button} from "@heroui/react";
 import AuthForm from "@/components/auth/auth-form.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {addToast} from "@heroui/toast";
+import {addToast} from "@heroui/react";
 import { getAPI } from "@/core/api.js";
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import {setDocumentTitle} from "@/core/utils.js";
 
 

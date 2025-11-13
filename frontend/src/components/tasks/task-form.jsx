@@ -1,16 +1,15 @@
-import {Form} from "@heroui/form";
-import {Input, Textarea} from "@heroui/input";
+import {Form} from "@heroui/react";
+import {Input, Textarea} from "@heroui/react";
 import {useEffect, useState} from "react";
 import { SlideDown } from "@/components/animations/slide-down";
-import { Tabs, Tab } from "@heroui/tabs";
-import { Divider } from "@heroui/divider";
-import { Button } from "@heroui/button";
-import { addToast } from "@heroui/toast";
+import { Tabs, Tab } from "@heroui/react";
+import { Button } from "@heroui/react";
+import { addToast } from "@heroui/react";
 import { Controller, useForm } from "react-hook-form";
 import { VALIDATION_MESSAGE_REQUIRED } from "@/core/const/common";
 import { useTasksStore } from "@/store/tasks";
 import { useShallow } from "zustand/react/shallow";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const periodTabs = {
   DATE: 'DATE',
