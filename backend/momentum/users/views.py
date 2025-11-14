@@ -9,14 +9,10 @@ from rest_framework.response import Response
 
 from users.serializers import RegisterSerializer, UserSerializer
 
-
 User = get_user_model()
 
 
-@extend_schema(
-    request=RegisterSerializer,
-    responses=None
-)
+@extend_schema(request=RegisterSerializer, responses=None)
 @api_view(['POST'])
 def register_view(request):
     serializer = RegisterSerializer(data=request.data)
@@ -28,11 +24,7 @@ def register_view(request):
 @extend_schema(
     responses=inline_serializer(
         name='AvailableTimezonesResponse',
-        fields={
-            'timezones': serializers.ListField(
-                child=serializers.CharField()
-            )
-        }
+        fields={'timezones': serializers.ListField(child=serializers.CharField())},
     )
 )
 @api_view()

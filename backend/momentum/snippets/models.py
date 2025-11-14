@@ -16,7 +16,7 @@ class SnippetsCategory(BaseModel, MPTTModel):
         null=True,
         blank=True,
         related_name='children',
-        verbose_name='Родительская категория'
+        verbose_name='Родительская категория',
     )
 
     class Meta:

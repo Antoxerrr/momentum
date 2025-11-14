@@ -1,4 +1,4 @@
-from django.db.models import Func, DateField
+from django.db.models import DateField, Func
 
 
 class _DateTruncAggregations(Func):
@@ -11,7 +11,7 @@ class _DateTruncAggregations(Func):
 
 class AddDays(_DateTruncAggregations):
     template = "(%(expressions)s + INTERVAL '%(days)s DAY')::date"
-    
+
     def __init__(self, expression, days, **extra):
         super().__init__(expression, **extra)
         self.extra['days'] = days
@@ -23,19 +23,19 @@ class AddDays(_DateTruncAggregations):
 
 
 class WeekEnd(_DateTruncAggregations):
-    template = '%(function)s(\'week\', %(expressions)s) + INTERVAL \'6 days\''
+    template = "%(function)s('week', %(expressions)s) + INTERVAL '6 days'"
 
 
 class MonthEnd(_DateTruncAggregations):
-    template = '%(function)s(\'month\', %(expressions)s) + INTERVAL \'1 month\' - INTERVAL \'1 day\''
+    template = "%(function)s('month', %(expressions)s) + INTERVAL '1 month' - INTERVAL '1 day'"
 
 
 class AddMonth(Func):
-    template = '%(expressions)s + INTERVAL \'1 month\''
+    template = "%(expressions)s + INTERVAL '1 month'"
     output_field = DateField()
 
 
 class TimezoneDate(Func):
     function = 'TIMEZONE'
-    template = "(%(function)s(%(expressions)s, CURRENT_TIMESTAMP))::date"
+    template = '(%(function)s(%(expressions)s, CURRENT_TIMESTAMP))::date'
     output_field = DateField()

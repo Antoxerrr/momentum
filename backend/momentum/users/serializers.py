@@ -1,15 +1,14 @@
 from zoneinfo import available_timezones
+
 from django.contrib.auth import get_user_model
 from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-
 User = get_user_model()
 
 
 class RegisterSerializer(serializers.Serializer):
-
     email = serializers.EmailField(min_length=3, max_length=254)
     username = serializers.CharField(min_length=3, max_length=32)
     password = serializers.CharField(min_length=8, max_length=128)
@@ -24,7 +23,7 @@ class RegisterSerializer(serializers.Serializer):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError('Пользователь с таким email уже существует')
         return value
-    
+
     def validate_timezone(self, value):
         if value not in available_timezones():
             raise serializers.ValidationError('Неверная временная зона')
@@ -35,7 +34,7 @@ class RegisterSerializer(serializers.Serializer):
         user = User(
             username=validated_data['username'],
             email=validated_data['email'],
-            timezone=validated_data['timezone']
+            timezone=validated_data['timezone'],
         )
         user.set_password(validated_data['password'])
         user.save()

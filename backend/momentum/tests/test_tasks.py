@@ -24,12 +24,7 @@ def _reload_task(task: Task):
     return Task.objects.annotate_user_today().annotate_actual_state().get(pk=task.pk)
 
 
-@pytest.mark.parametrize("period", [
-    None,
-    TaskPeriod.DAILY,
-    TaskPeriod.WEEKLY,
-    TaskPeriod.MONTHLY
-])
+@pytest.mark.parametrize('period', [None, TaskPeriod.DAILY, TaskPeriod.WEEKLY, TaskPeriod.MONTHLY])
 def test_task_completed(user, period):
     kwargs = {'period': period} if period else {'date': timezone.now().date()}
     task = _create_task(user, **kwargs)
@@ -39,12 +34,7 @@ def test_task_completed(user, period):
     assert task.completed is True
 
 
-@pytest.mark.parametrize("period", [
-    None,
-    TaskPeriod.DAILY,
-    TaskPeriod.WEEKLY,
-    TaskPeriod.MONTHLY
-])
+@pytest.mark.parametrize('period', [None, TaskPeriod.DAILY, TaskPeriod.WEEKLY, TaskPeriod.MONTHLY])
 def test_task_expired(user, period):
     kwargs = {'period': period} if period else {'date': timezone.now().date()}
     task = _create_task(user, **kwargs)
@@ -94,12 +84,15 @@ def test_task_last_completion_date(user, frozen_date):
         assert task.last_completion_date == next_day
 
 
-@pytest.mark.parametrize("period,expected_deadline,expected_shift", [
-    (None, lambda d: d, datetime.timedelta(days=0)),
-    (TaskPeriod.DAILY, lambda d: d, datetime.timedelta(days=1)),
-    (TaskPeriod.WEEKLY, get_end_of_week, relativedelta(weeks=1)),
-    (TaskPeriod.MONTHLY, get_end_of_month, relativedelta(months=1))
-])
+@pytest.mark.parametrize(
+    'period,expected_deadline,expected_shift',
+    [
+        (None, lambda d: d, datetime.timedelta(days=0)),
+        (TaskPeriod.DAILY, lambda d: d, datetime.timedelta(days=1)),
+        (TaskPeriod.WEEKLY, get_end_of_week, relativedelta(weeks=1)),
+        (TaskPeriod.MONTHLY, get_end_of_month, relativedelta(months=1)),
+    ],
+)
 def test_task_actual_deadline(user, frozen_date, period, expected_deadline, expected_shift):
     kwargs = {'period': period} if period else {'date': frozen_date}
     task = _create_task(user, **kwargs)

@@ -1,7 +1,3 @@
-import datetime
-
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
 from django.db.transaction import atomic
 from rest_framework import serializers
 
@@ -11,14 +7,10 @@ from tasks.models import Task
 class PenaltyTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = (
-            'name',
-            'description'
-        )
+        fields = ('name', 'description')
 
 
 class TaskSerializer(serializers.ModelSerializer):
-
     penalty_task = PenaltyTaskSerializer(required=False)
     actual_deadline = serializers.DateField(read_only=True)
     completed = serializers.BooleanField(read_only=True)
@@ -62,7 +54,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
         if penalty_task_data:
             penalty_task = Task.objects.create(**penalty_task_data, user=request.user)
-        
+
         task = Task(**validated_data, user=request.user)
         if penalty_task:
             task.penalty_task = penalty_task

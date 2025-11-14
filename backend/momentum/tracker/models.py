@@ -3,14 +3,17 @@ from django.db import models
 
 from core.models import BaseModel
 
-
 User = get_user_model()
+
 
 class TrackerProject(BaseModel):
     name = models.CharField('Название', max_length=128)
     tag = models.CharField('Короткий тег', max_length=6)
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Создатель', related_name='tracker_projects'
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Создатель',
+        related_name='tracker_projects',
     )
 
     class Meta:
@@ -23,7 +26,12 @@ class TrackerProject(BaseModel):
 
 class TrackerEpic(BaseModel):
     name = models.CharField('Название', max_length=128)
-    project = models.ForeignKey(TrackerProject, on_delete=models.CASCADE, verbose_name='Проект', related_name='epics')
+    project = models.ForeignKey(
+        TrackerProject,
+        on_delete=models.CASCADE,
+        verbose_name='Проект',
+        related_name='epics',
+    )
 
     class Meta:
         verbose_name = 'Эпик'
@@ -36,7 +44,12 @@ class TrackerEpic(BaseModel):
 class TrackerTask(BaseModel):
     name = models.CharField('Название', max_length=128)
     epic = models.ForeignKey(
-        TrackerEpic, on_delete=models.SET_NULL, verbose_name='Эпик', related_name='tasks', null=True, blank=True
+        TrackerEpic,
+        on_delete=models.SET_NULL,
+        verbose_name='Эпик',
+        related_name='tasks',
+        null=True,
+        blank=True,
     )
 
     class Meta:

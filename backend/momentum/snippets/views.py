@@ -5,7 +5,11 @@ from rest_framework.viewsets import ModelViewSet
 
 from snippets.filters import SnippetsFilter
 from snippets.models import SnippetsCategory
-from snippets.serializers import CreateUpdateSnippetSerializer, SnippetSerializer, CategorySerializer
+from snippets.serializers import (
+    CategorySerializer,
+    CreateUpdateSnippetSerializer,
+    SnippetSerializer,
+)
 
 
 class SnippetsViewSet(ModelViewSet):

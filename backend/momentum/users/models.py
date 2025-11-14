@@ -1,5 +1,4 @@
-import datetime
-from zoneinfo import available_timezones, ZoneInfo
+from zoneinfo import available_timezones
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -9,8 +8,4 @@ DEFAULT_USER_TIMEZONE = 'UTC'
 
 
 class User(AbstractUser):
-    timezone = models.CharField(
-        max_length=32,
-        choices=TIMEZONE_CHOICES,
-        default=DEFAULT_USER_TIMEZONE
-    )
+    timezone = models.CharField(max_length=32, choices=TIMEZONE_CHOICES, default=DEFAULT_USER_TIMEZONE)

@@ -1,5 +1,3 @@
-from unicodedata import category
-
 from django.forms.widgets import SelectMultiple
 from django_filters import rest_framework as filters
 
