@@ -1,15 +1,15 @@
-import AuthLayout from "@/layouts/auth.jsx";
-import {Link} from "@heroui/react";
-import {Input} from "@heroui/react";
-import {Button} from "@heroui/react";
-import AuthForm from "@/components/auth/auth-form.jsx";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {addToast} from "@heroui/react";
-import { getAPI } from "@/core/api.js";
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import {setDocumentTitle} from "@/core/utils.js";
+import { Link } from '@heroui/react';
+import { Input } from '@heroui/react';
+import { Button } from '@heroui/react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { addToast } from '@heroui/react';
+import { Autocomplete, AutocompleteItem } from '@heroui/react';
 
+import { getAPI } from '@/core/api.js';
+import AuthForm from '@/components/auth/auth-form.jsx';
+import AuthLayout from '@/layouts/auth.jsx';
+import { setDocumentTitle } from '@/core/utils.js';
 
 export default function RegisterPage() {
   const [errors, setErrors] = useState({});
@@ -18,22 +18,26 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAPI().users.availableTimezones().then(response => {
-      setTimezoneChoices(response.data.timezones);
-    });
+    getAPI()
+      .users.availableTimezones()
+      .then((response) => {
+        setTimezoneChoices(response.data.timezones);
+      });
 
-    setDocumentTitle("Регистрация");
+    setDocumentTitle('Регистрация');
   }, []);
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     const data = Object.fromEntries(new FormData(e.currentTarget));
 
     const [formValid, validationErrors] = validateForm(data);
+
     setErrors(validationErrors);
     if (!formValid) {
       setLoading(false);
+
       return;
     }
 
@@ -43,8 +47,8 @@ export default function RegisterPage() {
         title: 'Успешная регистрация',
         description: 'Авторизуйтесь для продолжения',
         color: 'success',
-      })
-      navigate('/login', {replace: true});
+      });
+      navigate('/login', { replace: true });
     } catch (error) {
       error.status === 400 && setErrors(error.response.data);
     } finally {
@@ -54,7 +58,12 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout>
-      <AuthForm title="Регистрация" onSubmit={onSubmit} footer={<LoginLink/>} errors={errors}>
+      <AuthForm
+        errors={errors}
+        footer={<LoginLink />}
+        title="Регистрация"
+        onSubmit={onSubmit}
+      >
         <Input
           isRequired
           label="Логин"
@@ -84,21 +93,26 @@ export default function RegisterPage() {
           type="password"
         />
 
-        {
-        timezoneChoices.length > 0 &&
-        <Autocomplete
-          isRequired
-          defaultSelectedKeys="UTC"
-          label="Часовой пояс"
-          name="timezone"
-        >
-          {timezoneChoices.map((timezone) => (
-            <AutocompleteItem key={timezone}>{timezone}</AutocompleteItem>
-          ))}
-        </Autocomplete>
-        }
+        {timezoneChoices.length > 0 && (
+          <Autocomplete
+            isRequired
+            defaultSelectedKeys="UTC"
+            label="Часовой пояс"
+            name="timezone"
+          >
+            {timezoneChoices.map((timezone) => (
+              <AutocompleteItem key={timezone}>{timezone}</AutocompleteItem>
+            ))}
+          </Autocomplete>
+        )}
 
-        <Button type="submit" color="primary" variant="shadow" className="w-full mt-3 shadow-md" isLoading={loading}>
+        <Button
+          className="w-full mt-3 shadow-md"
+          color="primary"
+          isLoading={loading}
+          type="submit"
+          variant="shadow"
+        >
           Регистрация
         </Button>
       </AuthForm>
@@ -106,34 +120,33 @@ export default function RegisterPage() {
   );
 }
 
-
 function LoginLink() {
   return (
     <>
       Уже есть аккаунт?&nbsp;
-      <Link href="/login" underline="hover" className="text-sm">
+      <Link className="text-sm" href="/login" underline="hover">
         Войти
       </Link>
     </>
-  )
+  );
 }
-
 
 function validateForm(data) {
   const errors = {};
+
   if (data.password !== data.password_confirm) {
     errors.password_confirm = 'Пароли не совпадают';
   } else if (data.password.length < 8) {
-    errors.password = "Минимальная длина - 8";
+    errors.password = 'Минимальная длина - 8';
   }
 
   if (data.email.length < 3) {
-    errors.email = "Минимальная длина - 3";
+    errors.email = 'Минимальная длина - 3';
   }
 
   if (data.username.length < 3) {
-    errors.username = "Минимальная длина - 3";
+    errors.username = 'Минимальная длина - 3';
   }
 
-  return [Object.keys(errors).length === 0, errors]
+  return [Object.keys(errors).length === 0, errors];
 }

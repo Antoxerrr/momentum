@@ -1,1 +1,1 @@
-export const VALIDATION_MESSAGE_REQUIRED = "Обязательное поле";
+export const VALIDATION_MESSAGE_REQUIRED = 'Обязательное поле';

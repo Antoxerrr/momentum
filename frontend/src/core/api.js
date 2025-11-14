@@ -1,15 +1,17 @@
-import axios from "axios";
-import {getAccessToken, purgeAccessToken} from "@/core/local-storage.js";
-import { getUserTimeZone } from "./utils";
+import axios from 'axios';
 
+import { getUserTimeZone } from './utils';
+
+import { getAccessToken, purgeAccessToken } from '@/core/local-storage.js';
 
 function getDefaultBaseUrl() {
   const currentOrigin = window.location.origin;
+
   return `${currentOrigin}/api/`;
 }
 
 function detailedPath(path, id) {
-  return `${path}${id}/`
+  return `${path}${id}/`;
 }
 
 class APIClient {
@@ -17,8 +19,8 @@ class APIClient {
     this.client = axios.create({
       baseURL: baseUrl || getDefaultBaseUrl(),
       paramsSerializer: {
-        indexes: null
-      }
+        indexes: null,
+      },
     });
     this._setupInterceptors();
     this.setAuthToken();
@@ -32,16 +34,17 @@ class APIClient {
 
   _setupInterceptors() {
     this.client.interceptors.response.use(
-      response => response,
-      error => {
+      (response) => response,
+      (error) => {
         if (error.response.status === 401) {
           purgeAccessToken();
           this.setAuthToken();
           // TODO: хрень?
           location.href = '/login';
         }
+
         return Promise.reject(error);
-      }
+      },
     );
   }
 
@@ -51,6 +54,7 @@ class APIClient {
 
   setAuthToken() {
     const token = getAccessToken();
+
     if (token) {
       this.client.defaults.headers.common['Authorization'] = `Token ${token}`;
     } else {
@@ -103,55 +107,55 @@ class CRUDModule extends BaseAPIModule {
   }
 }
 
-
 class SnippetsModule extends CRUDModule {
   path = 'snippets/';
 }
 
-
 class SnippetsCategoriesModule extends CRUDModule {
   path = 'snippets/categories/';
 }
-
 
 class TasksModule extends CRUDModule {
   path = 'tasks/';
 
   async archive(id) {
     const path = `tasks/${id}/archive/`;
+
     return this.api.patch(path);
   }
 
   async complete(id) {
     const path = `tasks/${id}/complete/`;
+
     return this.api.post(path);
   }
 
   async undoComplete(id) {
     const path = `tasks/${id}/undo_complete/`;
+
     return this.api.post(path);
   }
 }
 
 class UsersModule extends BaseAPIModule {
   async register(data) {
-    return await this.api.post("users/register/", data);
+    return await this.api.post('users/register/', data);
   }
 
   async login(data) {
-    return await this.api.post("users/login/", data);
+    return await this.api.post('users/login/', data);
   }
 
   async me() {
-    return await this.api.get("users/me/");
+    return await this.api.get('users/me/');
   }
 
   async editMe(data) {
-    return await this.api.patch("users/me/", data);
+    return await this.api.patch('users/me/', data);
   }
 
   async availableTimezones() {
-    return await this.api.get("users/available_timezones/");
+    return await this.api.get('users/available_timezones/');
   }
 }
 
@@ -163,5 +167,6 @@ export function getAPI() {
   }
   apiInstance.setAuthToken();
   apiInstance.setTimezone();
+
   return apiInstance;
 }

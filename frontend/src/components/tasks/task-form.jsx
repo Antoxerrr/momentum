@@ -1,15 +1,16 @@
-import {Form} from "@heroui/react";
-import {Input, Textarea} from "@heroui/react";
-import {useEffect, useState} from "react";
-import { SlideDown } from "@/components/animations/slide-down";
-import { Tabs, Tab } from "@heroui/react";
-import { Button } from "@heroui/react";
-import { addToast } from "@heroui/react";
-import { Controller, useForm } from "react-hook-form";
-import { VALIDATION_MESSAGE_REQUIRED } from "@/core/const/common";
-import { useTasksStore } from "@/store/tasks";
-import { useShallow } from "zustand/react/shallow";
-import { useNavigate } from "react-router-dom";
+import { Form } from '@heroui/react';
+import { Input, Textarea } from '@heroui/react';
+import { useEffect, useState } from 'react';
+import { Tabs, Tab } from '@heroui/react';
+import { Button } from '@heroui/react';
+import { addToast } from '@heroui/react';
+import { Controller, useForm } from 'react-hook-form';
+import { useShallow } from 'zustand/react/shallow';
+import { useNavigate } from 'react-router-dom';
+
+import { VALIDATION_MESSAGE_REQUIRED } from '@/core/const/common';
+import { useTasksStore } from '@/store/tasks';
+import { SlideDown } from '@/components/animations/slide-down';
 
 const periodTabs = {
   DATE: 'DATE',
@@ -18,7 +19,7 @@ const periodTabs = {
   MONTHLY: 'MONTHLY',
 };
 
-export function TaskForm({setFormActive, taskData}) {
+export function TaskForm({ setFormActive, taskData }) {
   const [addPenaltyTask, setAddPenaltyTask] = useState(false);
   const [selectedTaskType, setSelectedTaskType] = useState(periodTabs.DATE);
   const [loading, setLoading] = useState(false);
@@ -26,23 +27,21 @@ export function TaskForm({setFormActive, taskData}) {
   const isCreating = !taskData;
 
   const { createTask } = useTasksStore(
-    useShallow(state => ({
+    useShallow((state) => ({
       createTask: state.createTask,
       editTask: state.editTask,
-    }))
+    })),
   );
-
-  console.log(taskData)
 
   useEffect(() => {
     if (!isCreating) {
-      reset({name: "fsgsdfgs"});
+      reset({ name: 'fsgsdfgs' });
     }
   }, []);
 
-  const {handleSubmit, control, reset} = useForm();
+  const { handleSubmit, control, reset } = useForm();
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     setLoading(true);
 
     if (selectedTaskType !== periodTabs.DATE) {
@@ -65,11 +64,13 @@ export function TaskForm({setFormActive, taskData}) {
         setFormActive(false);
         reset();
       } else {
-        navigate(`/tasks/${taskData.id}`, {replace: true});
+        navigate(`/tasks/${taskData.id}`, { replace: true });
       }
     } catch (error) {
       addToast({
-        title: isCreating ? 'Ошибка при создании задачи' : 'Ошибка при редактировании задачи',
+        title: isCreating
+          ? 'Ошибка при создании задачи'
+          : 'Ошибка при редактировании задачи',
         color: 'danger',
       });
       throw error;
@@ -83,130 +84,149 @@ export function TaskForm({setFormActive, taskData}) {
       <Controller
         control={control}
         name="name"
-        render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+        render={({
+          field: { name, value, onChange, onBlur, ref },
+          fieldState: { invalid, error },
+        }) => (
           <Input
             ref={ref}
-            size="sm"
-            type="text"
+            isRequired
             autoComplete="off"
             className="flex"
+            errorMessage={error?.message}
+            isInvalid={invalid}
             label="Имя задачи"
             labelPlacement="inside"
-            isRequired
-            errorMessage={error?.message}
-            validationBehavior="aria"
-            isInvalid={invalid}
             name={name}
+            size="sm"
+            type="text"
+            validationBehavior="aria"
             value={value}
             onBlur={onBlur}
             onChange={onChange}
           />
         )}
-        rules={{required: VALIDATION_MESSAGE_REQUIRED}}
+        rules={{ required: VALIDATION_MESSAGE_REQUIRED }}
       />
       <Controller
         control={control}
         name="description"
-        render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+        render={({
+          field: { name, value, onChange, onBlur, ref },
+          fieldState: { invalid, error },
+        }) => (
           <Textarea
             ref={ref}
             className="mt-3"
-            label="Описание"
             errorMessage={error?.message}
-            validationBehavior="aria"
             isInvalid={invalid}
+            label="Описание"
             name={name}
+            validationBehavior="aria"
             value={value}
             onBlur={onBlur}
             onChange={onChange}
           />
         )}
       />
-      <Tabs className="mt-3" fullWidth={true} selectedKey={selectedTaskType} onSelectionChange={setSelectedTaskType}>
-        <Tab key={periodTabs.DATE} title="Дата"></Tab>
-        <Tab key={periodTabs.DAILY} title="Ежедневная"></Tab>
-        <Tab key={periodTabs.WEEKLY} title="Еженедельная"></Tab>
-        <Tab key={periodTabs.MONTHLY} title="Ежемесячная"></Tab>
+      <Tabs
+        className="mt-3"
+        fullWidth={true}
+        selectedKey={selectedTaskType}
+        onSelectionChange={setSelectedTaskType}
+      >
+        <Tab key={periodTabs.DATE} title="Дата" />
+        <Tab key={periodTabs.DAILY} title="Ежедневная" />
+        <Tab key={periodTabs.WEEKLY} title="Еженедельная" />
+        <Tab key={periodTabs.MONTHLY} title="Ежемесячная" />
       </Tabs>
 
       <SlideDown show={selectedTaskType === periodTabs.DATE}>
         <Controller
           control={control}
           name="date"
-          render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+          render={({
+            field: { name, value, onChange, onBlur, ref },
+            fieldState: { invalid, error },
+          }) => (
             <Input
               ref={ref}
-              type="date"
-              className="mt-3"
-              label="Дата"
               isRequired
+              className="mt-3"
               errorMessage={error?.message}
-              validationBehavior="aria"
               isInvalid={invalid}
+              label="Дата"
               name={name}
+              type="date"
+              validationBehavior="aria"
               value={value}
               onBlur={onBlur}
               onChange={onChange}
             />
           )}
-          rules={{required: VALIDATION_MESSAGE_REQUIRED}}
+          rules={{ required: VALIDATION_MESSAGE_REQUIRED }}
         />
       </SlideDown>
 
-      {
-        addPenaltyTask ?
+      {addPenaltyTask ? (
         <p
           className="text-sm cursor-pointer text-primary hover:opacity-hover transition-opacity mt-2 select-none"
           onClick={() => setAddPenaltyTask(false)}
         >
           Удалить штрафную задачу
         </p>
-        :
+      ) : (
         <p
           className="text-sm cursor-pointer text-primary hover:opacity-hover transition-opacity mt-2 select-none"
           onClick={() => setAddPenaltyTask(true)}
         >
           Добавить штрафную задачу
         </p>
-      }
+      )}
 
       <SlideDown show={addPenaltyTask}>
         <Controller
           control={control}
           name="penalty_task.name"
-          render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+          render={({
+            field: { name, value, onChange, onBlur, ref },
+            fieldState: { invalid, error },
+          }) => (
             <Input
               ref={ref}
-              size="sm"
-              type="text"
+              isRequired
               autoComplete="off"
               className="flex mt-3"
+              errorMessage={error?.message}
+              isInvalid={invalid}
               label="Имя штрафной задачи"
               labelPlacement="inside"
-              isRequired
-              errorMessage={error?.message}
-              validationBehavior="aria"
-              isInvalid={invalid}
               name={name}
+              size="sm"
+              type="text"
+              validationBehavior="aria"
               value={value}
               onBlur={onBlur}
               onChange={onChange}
             />
           )}
-          rules={{required: VALIDATION_MESSAGE_REQUIRED}}
+          rules={{ required: VALIDATION_MESSAGE_REQUIRED }}
         />
         <Controller
           control={control}
           name="penalty_task.description"
-          render={({field: {name, value, onChange, onBlur, ref}, fieldState: {invalid, error}}) => (
+          render={({
+            field: { name, value, onChange, onBlur, ref },
+            fieldState: { invalid, error },
+          }) => (
             <Textarea
               ref={ref}
               className="mt-3"
-              label="Описание штрафной задачи"
               errorMessage={error?.message}
-              validationBehavior="aria"
               isInvalid={invalid}
+              label="Описание штрафной задачи"
               name={name}
+              validationBehavior="aria"
               value={value}
               onBlur={onBlur}
               onChange={onChange}
@@ -215,9 +235,15 @@ export function TaskForm({setFormActive, taskData}) {
         />
       </SlideDown>
 
-      <Button type="submit" color="primary" variant="shadow" className="w-full mt-3 shadow-md" isLoading={loading}>
+      <Button
+        className="w-full mt-3 shadow-md"
+        color="primary"
+        isLoading={loading}
+        type="submit"
+        variant="shadow"
+      >
         Создать
       </Button>
     </Form>
-  )
+  );
 }

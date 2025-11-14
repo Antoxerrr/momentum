@@ -1,11 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 
-export const MoonFilledIcon = ({
-  size = 24,
-  width,
-  height,
-  ...props
-}) => (
+export const MoonFilledIcon = ({ size = 24, width, height, ...props }) => (
   <svg
     aria-hidden="true"
     focusable="false"
@@ -22,12 +17,7 @@ export const MoonFilledIcon = ({
   </svg>
 );
 
-export const SunFilledIcon = ({
-  size = 24,
-  width,
-  height,
-  ...props
-}) => (
+export const SunFilledIcon = ({ size = 24, width, height, ...props }) => (
   <svg
     aria-hidden="true"
     focusable="false"
@@ -43,4 +33,3 @@ export const SunFilledIcon = ({
     </g>
   </svg>
 );
-

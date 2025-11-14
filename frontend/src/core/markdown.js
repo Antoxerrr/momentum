@@ -1,8 +1,9 @@
-import hljs from "highlight.js";
+import hljs from 'highlight.js';
 
-export const formatMarkdown = text => {
+export const formatMarkdown = (text) => {
   text = text || '';
-  return text.replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/,"")
+
+  return text.replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/, '');
 };
 
 export const highlightMarkdown = (code, lang) => {

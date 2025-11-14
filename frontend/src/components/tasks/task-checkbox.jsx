@@ -1,6 +1,7 @@
-import {Checkbox} from "@heroui/react";
-import {useState} from "react";
-import {getAPI} from "@/core/api.js";
+import { Checkbox } from '@heroui/react';
+import { useState } from 'react';
+
+import { getAPI } from '@/core/api.js';
 
 export default function TaskCheckbox({ task, className, onCompletedChange }) {
   const [isSelected, setIsSelected] = useState(false);
@@ -14,25 +15,25 @@ export default function TaskCheckbox({ task, className, onCompletedChange }) {
 
     try {
       const api = getAPI();
-      const { data } = newIsSelected ?
-        api.tasks.complete(task.id) :
-        api.tasks.undoComplete(task.id);
+      const { data } = newIsSelected
+        ? api.tasks.complete(task.id)
+        : api.tasks.undoComplete(task.id);
 
       onCompletedChange(newIsSelected, data);
-    } catch (error) {
+    } catch {
       setIsSelected(!newIsSelected);
     }
   };
 
   return (
-    <div className={className || ""}>
+    <div className={className || ''}>
       <Checkbox
-        radius="full"
-        size="lg"
         isDisabled={task.archived}
         isSelected={isSelected}
+        radius="full"
+        size="lg"
         onValueChange={selectedChange}
-      ></Checkbox>
+      />
     </div>
-  )
+  );
 }

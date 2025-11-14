@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Fade({ children, show, duration }) {
   const animDuration = duration || 0.3;
@@ -7,22 +7,22 @@ export function Fade({ children, show, duration }) {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0 }}
           animate={{
             opacity: 1,
           }}
+          className="w-full"
           exit={{
             opacity: 0,
           }}
-          transition={{ 
+          initial={{ opacity: 0 }}
+          transition={{
             duration: animDuration,
             opacity: { duration: animDuration },
           }}
-          className="w-full"
         >
           {children}
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }

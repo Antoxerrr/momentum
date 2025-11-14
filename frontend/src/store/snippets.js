@@ -1,7 +1,7 @@
-import {create} from "zustand";
-import {getAPI} from "@/core/api.js";
-import {debounce} from "@/core/utils.js";
+import { create } from 'zustand';
 
+import { getAPI } from '@/core/api.js';
+import { debounce } from '@/core/utils.js';
 
 const defaultState = {
   listLoading: false,
@@ -21,26 +21,26 @@ export const useSnippetsStore = create((set, get) => ({
     set(defaultState);
   },
 
-  setQueryString: query => {
-    set({queryString: query});
+  setQueryString: (query) => {
+    set({ queryString: query });
     get().debouncedLoadSnippets();
   },
 
   clearSelectedCategories: () => {
-    set({selectedCategories: []});
+    set({ selectedCategories: [] });
     get().debouncedLoadSnippets();
   },
 
-  switchCategory: categoryId => {
+  switchCategory: (categoryId) => {
     const state = get();
     const categories = state.selectedCategories;
     const idx = state.selectedCategories.indexOf(categoryId);
 
     if (idx === -1) {
-      set({selectedCategories: [...categories, categoryId]});
+      set({ selectedCategories: [...categories, categoryId] });
     } else {
       categories.splice(idx, 1);
-      set({selectedCategories: categories});
+      set({ selectedCategories: categories });
     }
 
     state.debouncedLoadSnippets();
@@ -52,7 +52,8 @@ export const useSnippetsStore = create((set, get) => ({
 
   loadSnippets: async () => {
     const state = get();
-    set({listLoading: true, listLoadingError: false});
+
+    set({ listLoading: true, listLoadingError: false });
     const filters = {};
 
     if (state.selectedCategories.length > 0) {
@@ -64,17 +65,19 @@ export const useSnippetsStore = create((set, get) => ({
     }
 
     try {
-        const { data } = await getAPI().snippets.list(filters);
-        set({snippets: data});
-    } catch (e) {
-        set({listLoadingError: true, snippets: []});
+      const { data } = await getAPI().snippets.list(filters);
+
+      set({ snippets: data });
+    } catch {
+      set({ listLoadingError: true, snippets: [] });
     } finally {
-        set({listLoading: false});
+      set({ listLoading: false });
     }
   },
 
   loadCategories: async () => {
     const { data } = await getAPI().snippetsCategories.list();
-    set({categories: data});
+
+    set({ categories: data });
   },
 }));

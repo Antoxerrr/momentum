@@ -1,21 +1,25 @@
-import { Link } from "@heroui/react";
+import { Link } from '@heroui/react';
 import {
   Navbar as HeroUINavbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@heroui/react";
-import {useLocation, useNavigate} from "react-router-dom";
-import { useEffect } from "react";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
-import {useUserStore} from "@/store/user.js";
-import UserAvatar from "@/components/user-avatar";
+} from '@heroui/react';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from '@heroui/react';
 
+import { useUserStore } from '@/store/user.js';
+import UserAvatar from '@/components/user-avatar';
 
 export function Navbar() {
   const { logout, isAuthenticated, account, loadUserAccount } = useUserStore();
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -38,95 +42,107 @@ export function Navbar() {
             color="foreground"
             href="/"
           >
-            <p className={`font-bold text-inherit hover:text-primary-500 transition-colors duration-200`}>MOMENTUM</p>
+            <p
+              className={`font-bold text-inherit hover:text-primary-500 transition-colors duration-200`}
+            >
+              MOMENTUM
+            </p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent justify="center">
-        {isAuthenticated && <NavbarNavMenu/>}
+        {isAuthenticated && <NavbarNavMenu />}
       </NavbarContent>
 
-      <NavbarContent
-        className="flex basis-1/5"
-        justify="end"
-      >
+      <NavbarContent className="flex basis-1/5" justify="end">
         <NavbarItem className="flex items-center gap-3 text-default-500 h-6">
-          {isAuthenticated && <UserDropdown account={account} logoutFunc={performLogout}/>}
-          <div id="navbar-portal"></div>
+          {isAuthenticated && (
+            <UserDropdown account={account} logoutFunc={performLogout} />
+          )}
+          <div id="navbar-portal" />
         </NavbarItem>
       </NavbarContent>
     </HeroUINavbar>
   );
 }
 
-
-function UserDropdown({logoutFunc, account}) {
+function UserDropdown({ logoutFunc, account }) {
   return (
     <Dropdown shouldBlockScroll={false}>
       <DropdownTrigger>
         <div>
-          <UserAvatar username={account.username} className="cursor-pointer"/>
+          <UserAvatar className="cursor-pointer" username={account.username} />
         </div>
       </DropdownTrigger>
-      <DropdownMenu
-        className="p-1"
-        disabledKeys={["user-info"]}
-      >
-        <DropdownItem key="user-info" isReadOnly className="opacity-100 text-default-500">
-          <div><p>{account.username} • {account.timezone}</p></div>
+      <DropdownMenu className="p-1" disabledKeys={['user-info']}>
+        <DropdownItem
+          key="user-info"
+          isReadOnly
+          className="opacity-100 text-default-500"
+        >
+          <div>
+            <p>
+              {account.username} • {account.timezone}
+            </p>
+          </div>
         </DropdownItem>
         <DropdownItem key="profile" href="/profile">
           Профиль
         </DropdownItem>
-        <DropdownItem key="logout" className="text-danger" color="danger" onPress={logoutFunc}>
+        <DropdownItem
+          key="logout"
+          className="text-danger"
+          color="danger"
+          onPress={logoutFunc}
+        >
           Выйти
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
-  )
+  );
 }
 
 function NavbarNavMenu() {
   return (
     <div className="flex gap-4 justify-start ml-2">
-      {getMenuLinks().map(item => {
+      {getMenuLinks().map((item) => {
         return (
           <NavbarItem
             key={item.href}
-            isActive={location.pathname.startsWith(item.href)}
             className="data-[active=true]:underline"
+            isActive={location.pathname.startsWith(item.href)}
           >
             <Link
               className="font-medium text-[0.95rem] text-foreground tracking-tight"
+              href={item.href}
               style={{
                 textDecorationLine: 'inherit',
-                textUnderlineOffset: '10px'
+                textUnderlineOffset: '10px',
               }}
-              href={item.href}
             >
               {item.title}
             </Link>
           </NavbarItem>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 function getMenuLinks() {
   return [
     {
-      href: "/tasks",
-      title: "Список дел"
+      href: '/tasks',
+      title: 'Список дел',
     },
     {
-      href: "/snippets",
-      title: "Сниппеты"
+      href: '/snippets',
+      title: 'Сниппеты',
     },
     {
-      href: "/tracker/projects",
-      title: "Трекер"
+      href: '/tracker/projects',
+      title: 'Трекер',
     },
-  ]
+  ];
 }

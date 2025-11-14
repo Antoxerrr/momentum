@@ -1,27 +1,28 @@
-import AuthLayout from "@/layouts/auth.jsx";
-import {Link} from "@heroui/react";
-import {Input} from "@heroui/react";
-import {Button} from "@heroui/react";
-import AuthForm from "@/components/auth/auth-form.jsx";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {useShallow} from "zustand/react/shallow";
-import {useUserStore} from "@/store/user.js";
-import {setDocumentTitle} from "@/core/utils.js";
+import { Link } from '@heroui/react';
+import { Input } from '@heroui/react';
+import { Button } from '@heroui/react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useShallow } from 'zustand/react/shallow';
+
+import AuthForm from '@/components/auth/auth-form.jsx';
+import AuthLayout from '@/layouts/auth.jsx';
+import { useUserStore } from '@/store/user.js';
+import { setDocumentTitle } from '@/core/utils.js';
 
 export default function LoginPage() {
   useEffect(() => {
-    setDocumentTitle("Авторизация");
+    setDocumentTitle('Авторизация');
   }, []);
 
   const [loading, setLoading] = useState(false);
   const [isWrongCredentials, setIsWrongCredentials] = useState(false);
   const { login } = useUserStore(
-    useShallow(state => ({ login: state.login }))
+    useShallow((state) => ({ login: state.login })),
   );
   const navigate = useNavigate();
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setIsWrongCredentials(false);
@@ -30,7 +31,7 @@ export default function LoginPage() {
     try {
       await login(data);
 
-      navigate('/', {replace: true});
+      navigate('/', { replace: true });
     } catch (error) {
       error.status === 400 && setIsWrongCredentials(true);
     } finally {
@@ -40,7 +41,11 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-      <AuthForm title="Авторизация" onSubmit={onSubmit} footer={<RegistrationLink/>}>
+      <AuthForm
+        footer={<RegistrationLink />}
+        title="Авторизация"
+        onSubmit={onSubmit}
+      >
         <Input
           isRequired
           label="Логин"
@@ -55,30 +60,34 @@ export default function LoginPage() {
           name="password"
           type="password"
         />
-        <Button type="submit" color="primary" variant="shadow" className="w-full mt-3 shadow-md" isLoading={loading}>
+        <Button
+          className="w-full mt-3 shadow-md"
+          color="primary"
+          isLoading={loading}
+          type="submit"
+          variant="shadow"
+        >
           Войти
         </Button>
-        {isWrongCredentials && <CredentialsError/>}
+        {isWrongCredentials && <CredentialsError />}
       </AuthForm>
     </AuthLayout>
   );
 }
 
-
 function RegistrationLink() {
   return (
     <>
       Нет аккаунта?&nbsp;
-      <Link href="/register" underline="hover" className="text-sm">
+      <Link className="text-sm" href="/register" underline="hover">
         Зарегистрироваться
       </Link>
     </>
-  )
+  );
 }
-
 
 function CredentialsError() {
   return (
     <p className="text-danger text-sm block mt-3">Неверный логин или пароль</p>
-  )
+  );
 }
