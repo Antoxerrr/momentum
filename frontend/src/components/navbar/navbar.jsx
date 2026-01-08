@@ -16,6 +16,7 @@ import {
 
 import { useUserStore } from '@/store/user.js';
 import UserAvatar from '@/components/user-avatar';
+import {getUserTimeZone} from "@/core/utils.js";
 
 export function Navbar() {
   const { logout, isAuthenticated, account, loadUserAccount } = useUserStore();
@@ -83,7 +84,7 @@ function UserDropdown({ logoutFunc, account }) {
         >
           <div>
             <p>
-              {account.username} • {account.timezone}
+              {account.username} • {getUserTimeZone()}
             </p>
           </div>
         </DropdownItem>

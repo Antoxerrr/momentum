@@ -42,7 +42,7 @@ export default function SnippetsListPage() {
               <SnippetForm closeForm={closeForm} />
             </SlideDown>
 
-            <SnippetCategoryList className="mt-6 flex flex-wrap gap-3" />
+            <SnippetCategoryList />
 
             <SnippetsList className="flex flex-col gap-7 mt-6" />
           </Fade>

@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from rest_framework import filters, status
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -37,3 +38,8 @@ class SnippetsCategoryViewSet(ModelViewSet):
     queryset = SnippetsCategory.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
+
+    def perform_destroy(self, instance):
+        if instance.snippets.exists():
+            raise APIException('В категории ещё остались сниппеты', status.HTTP_400_BAD_REQUEST)
+        return super().perform_destroy(instance)
