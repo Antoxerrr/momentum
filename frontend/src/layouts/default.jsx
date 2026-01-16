@@ -1,6 +1,7 @@
 import BaseLayout from './base.jsx';
 
 import { Navbar } from '@/components/navbar/navbar.jsx';
+import MobileMenu from "@/components/navbar/mobile-menu.jsx";
 
 export default function DefaultLayout({ children }) {
   return (
@@ -9,6 +10,7 @@ export default function DefaultLayout({ children }) {
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4 md:pt-12 pb-6">
         {children}
       </main>
+      <MobileMenu/>
     </BaseLayout>
   );
 }

@@ -17,6 +17,7 @@ import {
 import { useUserStore } from '@/store/user.js';
 import UserAvatar from '@/components/user-avatar';
 import {getUserTimeZone} from "@/core/utils.js";
+import {getMenuLinks} from "@/core/navigation.js";
 
 export function Navbar() {
   const { logout, isAuthenticated, account, loadUserAccount } = useUserStore();
@@ -52,8 +53,8 @@ export function Navbar() {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent justify="center">
-        {isAuthenticated && <NavbarNavMenu />}
+      <NavbarContent justify="center" className="hidden md:flex">
+        {isAuthenticated && <NavbarNavMenu/>}
       </NavbarContent>
 
       <NavbarContent className="flex basis-1/5" justify="end">
@@ -129,21 +130,4 @@ function NavbarNavMenu() {
       })}
     </div>
   );
-}
-
-function getMenuLinks() {
-  return [
-    {
-      href: '/tasks',
-      title: 'Список дел',
-    },
-    {
-      href: '/snippets',
-      title: 'Сниппеты',
-    },
-    {
-      href: '/tracker/projects',
-      title: 'Трекер',
-    },
-  ];
 }

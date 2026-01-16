@@ -10,6 +10,8 @@ html {
   font-family: Ubuntu, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+* { touch-action: manipulation; }
+
 .with-line-through-animated {
   text-decoration: none;
   background-image: linear-gradient(hsl(var(--heroui-foreground-600)), hsl(var(--heroui-foreground-600)));

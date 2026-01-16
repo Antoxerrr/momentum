@@ -92,9 +92,11 @@ function CategoryInplaceEditor({ category=null }) {
   };
 
   const deleteCategory = async () => {
+    let success = true;
     try {
       await getAPI().snippetsCategories.delete(category.id);
     } catch (e) {
+      success = false;
       const message = e.response?.data?.detail || 'Ошибка сервера';
       addToast({
         title: 'Категория не удалена',
@@ -102,11 +104,14 @@ function CategoryInplaceEditor({ category=null }) {
         color: 'danger',
       });
     }
-    addToast({
+
+    if (success) {
+      addToast({
         title: 'Категория удалена',
         color: 'success',
       });
-    await loadCategories();
+      await loadCategories();
+    }
   };
 
   return (
