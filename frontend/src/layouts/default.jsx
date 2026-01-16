@@ -7,7 +7,13 @@ export default function DefaultLayout({ children }) {
   return (
     <BaseLayout>
       <Navbar withNav={true} />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-4 md:pt-12 pb-6">
+      <main
+        className="container mx-auto max-w-7xl px-6 flex-grow pt-4 md:pt-12 pb-6"
+        style={{
+          paddingBottom:
+            'calc(var(--bottom-bar-height) + var(--bottom-bar-gap) + env(safe-area-inset-bottom))',
+        }}
+      >
         {children}
       </main>
       <MobileMenu/>

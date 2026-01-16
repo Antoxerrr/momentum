@@ -6,6 +6,11 @@
 
 @config "../../tailwind.config.js";
 
+:root {
+  --bottom-bar-height: 48px;
+  --bottom-bar-gap: 16px;
+}
+
 html {
   font-family: Ubuntu, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -28,5 +33,36 @@ html {
 
 html,
 body {
-  scrollbar-gutter: stable both-edges;
+  overscroll-behavior-y: none;
+}
+
+@media (min-width: 768px) {
+  html,
+  body {
+    scrollbar-gutter: stable both-edges;
+  }
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 767px) {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  #root {
+    height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior-y: none;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #root::-webkit-scrollbar {
+    display: none;
+  }
 }
