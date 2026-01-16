@@ -45,7 +45,7 @@ export default function ProfilePage() {
         title: 'Данные изменены',
         color: 'success',
       });
-      await loadUserAccount();
+      await loadUserAccount({ force: true });
     } catch (error) {
       error.status === 400 && setErrors(error.response.data);
     } finally {

@@ -1,7 +1,19 @@
+import { useEffect } from 'react';
 import { getMenuLinks } from '@/core/navigation.js';
 import { Link } from '@heroui/react';
+import { useUserStore } from '@/store/user.js';
+import UserAvatar from '@/components/user-avatar.jsx';
 
 export default function MobileMenu() {
+  const { account, isAuthenticated, loadUserAccount } = useUserStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+    loadUserAccount();
+  }, []);
+
   return (
     <div
       className="block md:hidden fixed bottom-0 left-0 w-full z-50 bg-background border-t border-default-200"
@@ -26,6 +38,13 @@ export default function MobileMenu() {
           </Link>
           );
         })}
+        <Link
+          href="/profile"
+          aria-label="Профиль"
+          className={`flex items-center justify-center flex-1 p-2 transition-colors ${location.pathname.startsWith('/profile') ? 'text-foreground' : 'text-default-500'}`}
+        >
+          <UserAvatar className="cursor-pointer" username={account.username} />
+        </Link>
       </div>
     </div>
   );
