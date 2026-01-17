@@ -1,11 +1,19 @@
-export default function UserAvatar({ className, username }) {
-  if (!username) return <div />;
+export default function UserAvatar({ className, username, sizeClassName }) {
+  const sizeClass = sizeClassName || 'w-9 h-9 text-sm';
+
+  if (!username) {
+    return (
+      <div
+        className={`${className || ''} ${sizeClass} rounded-full bg-default-200`}
+      />
+    );
+  }
 
   const color = getColorByUsername(username);
 
   return (
     <div
-      className={`${className} text-sm text-white w-9 h-9 rounded-full flex items-center justify-center`}
+      className={`${className || ''} ${sizeClass} text-white rounded-full flex items-center justify-center`}
       style={{
         background: color,
       }}

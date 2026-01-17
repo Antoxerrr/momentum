@@ -11,6 +11,8 @@ import TaskDetailsPage from '@/pages/tasks/task-details.jsx';
 import TaskEditPage from '@/pages/tasks/task-edit.jsx';
 import SnippetsListPage from '@/pages/snippets/snippets-list.jsx';
 import TrackerProjectsListPage from '@/pages/tracker/projects-list.jsx';
+import FinancePage from '@/pages/finance.jsx';
+import NotesPage from '@/pages/notes.jsx';
 
 function App() {
   const { checkAuthentication, isAuthenticated } = useUserStore(
@@ -40,6 +42,8 @@ function App() {
         <Route element={<SnippetsListPage />} path="/snippets" />
 
         <Route element={<TrackerProjectsListPage />} path="/tracker/projects" />
+        <Route element={<FinancePage />} path="/finance" />
+        <Route element={<NotesPage />} path="/notes" />
       </Route>
       <Route
         element={

@@ -16,13 +16,13 @@ export function TaskCard({ task }) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full border-b border-default-200 last:border-b-0 md:border-0">
       <Card
-        className="w-full"
+        className="w-full rounded-none bg-transparent md:rounded-lg md:bg-content1"
         isHoverable={true}
         isPressable={true}
         shadow="none"
-        onPress={() => {
+        onClick={() => {
           navigate(`/tasks/${task.id}`);
         }}
       >

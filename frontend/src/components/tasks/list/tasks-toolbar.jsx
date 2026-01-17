@@ -25,7 +25,7 @@ export function TasksToolbar() {
   const [formActive, setFormActive] = useState(false);
 
   return (
-    <div>
+    <div className="px-3 md:px-0">
       <ToolbarControls formActive={formActive} setFormActive={setFormActive} />
       <SlideDown show={formActive}>
         <TaskForm setFormActive={setFormActive} />

@@ -16,7 +16,7 @@ export default function MobileMenu() {
 
   return (
     <div
-      className="block md:hidden fixed bottom-0 left-0 w-full z-50 bg-background border-t border-default-200"
+      className="block md:hidden fixed bottom-0 left-0 w-full z-50 bg-background border-t border-default-100"
       style={{
         height: 'var(--bottom-bar-height)',
         paddingBottom: 'env(safe-area-inset-bottom)',
@@ -32,7 +32,7 @@ export default function MobileMenu() {
             key={href}
             href={href}
             aria-label={label}
-            className={`flex items-center justify-center flex-1 p-2 transition-colors ${isActive ? 'text-foreground' : 'text-default-500'}`}
+            className={`flex items-center justify-center flex-1 p-2 transition-colors ${isActive ? 'text-foreground' : 'text-default-300'}`}
           >
             <Icon className="w-6 h-6" />
           </Link>
@@ -43,7 +43,11 @@ export default function MobileMenu() {
           aria-label="Профиль"
           className={`flex items-center justify-center flex-1 p-2 transition-colors ${location.pathname.startsWith('/profile') ? 'text-foreground' : 'text-default-500'}`}
         >
-          <UserAvatar className="cursor-pointer" username={account.username} />
+          <UserAvatar
+            className="cursor-pointer"
+            sizeClassName="w-[29px] h-[29px] text-[12px]"
+            username={account.username}
+          />
         </Link>
       </div>
     </div>

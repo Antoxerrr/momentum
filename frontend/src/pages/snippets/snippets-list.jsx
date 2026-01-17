@@ -22,7 +22,7 @@ export default function SnippetsListPage() {
 
   return (
     <DefaultLayout>
-      <div className="w-full flex flex-col items-center">
+      <div className="w-full flex flex-col items-center px-3 md:px-0">
         <div className="md:w-3/4 w-full">
           <Fade duration={0.5} show={true}>
             <div className="flex flex-row gap-3 items-center justify-center">

@@ -71,7 +71,7 @@ function TasksContainer() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col md:gap-3">
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} />
       ))}

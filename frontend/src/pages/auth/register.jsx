@@ -4,7 +4,6 @@ import { Button } from '@heroui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addToast } from '@heroui/react';
-import { Autocomplete, AutocompleteItem } from '@heroui/react';
 
 import { getAPI } from '@/core/api.js';
 import AuthForm from '@/components/auth/auth-form.jsx';
@@ -14,16 +13,9 @@ import { setDocumentTitle } from '@/core/utils.js';
 export default function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  let [timezoneChoices, setTimezoneChoices] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAPI()
-      .users.availableTimezones()
-      .then((response) => {
-        setTimezoneChoices(response.data.timezones);
-      });
-
     setDocumentTitle('Регистрация');
   }, []);
 
@@ -92,19 +84,6 @@ export default function RegisterPage() {
           name="password_confirm"
           type="password"
         />
-
-        {timezoneChoices.length > 0 && (
-          <Autocomplete
-            isRequired
-            defaultSelectedKeys="UTC"
-            label="Часовой пояс"
-            name="timezone"
-          >
-            {timezoneChoices.map((timezone) => (
-              <AutocompleteItem key={timezone}>{timezone}</AutocompleteItem>
-            ))}
-          </Autocomplete>
-        )}
 
         <Button
           className="w-full mt-3 shadow-md"

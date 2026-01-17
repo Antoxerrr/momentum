@@ -17,6 +17,15 @@ html {
 
 * { touch-action: manipulation; }
 
+/* prevent zoom on field focus in safari */
+@media (max-width: 767px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
 .with-line-through-animated {
   text-decoration: none;
   background-image: linear-gradient(hsl(var(--heroui-foreground-600)), hsl(var(--heroui-foreground-600)));
