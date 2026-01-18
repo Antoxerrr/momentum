@@ -23,6 +23,7 @@ export function TaskForm({ setFormActive, taskData }) {
   const [addPenaltyTask, setAddPenaltyTask] = useState(false);
   const [selectedTaskType, setSelectedTaskType] = useState(periodTabs.DATE);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const isCreating = !taskData;
 
@@ -37,6 +38,20 @@ export function TaskForm({ setFormActive, taskData }) {
     if (!isCreating) {
       reset({ name: 'fsgsdfgs' });
     }
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(media.matches);
+    update();
+
+    if (media.addEventListener) {
+      media.addEventListener('change', update);
+      return () => media.removeEventListener('change', update);
+    }
+
+    media.addListener(update);
+    return () => media.removeListener(update);
   }, []);
 
   const { handleSubmit, control, reset } = useForm();
@@ -130,8 +145,12 @@ export function TaskForm({ setFormActive, taskData }) {
         )}
       />
       <Tabs
-        className="mt-3"
+        className="mt-3 w-full"
+        classNames={{
+          tabWrapper: "w-full",
+        }}
         fullWidth={true}
+        isVertical={isMobile}
         selectedKey={selectedTaskType}
         onSelectionChange={setSelectedTaskType}
       >
