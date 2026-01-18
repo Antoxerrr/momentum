@@ -27,6 +27,8 @@ services:
     command: gunicorn --bind 0.0.0.0:8000 --workers 4 --log-level info momentum.wsgi:application
     env_file:
       - .env
+    environment:
+      - PYTHONPATH=/app:/app/momentum
     expose:
       - "8000"
     volumes:
