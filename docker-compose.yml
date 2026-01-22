@@ -17,8 +17,7 @@ services:
       - redis_data:/data
 
   backend:
-    build:
-      context: ./backend
+    image: registry.antoxer.ru/momentum/backend:latest
     restart: unless-stopped
     command: gunicorn --bind 0.0.0.0:8000 --workers 2 --log-level info momentum.wsgi:application
     env_file:
@@ -35,8 +34,7 @@ services:
       - redis
 
   frontend:
-    build:
-      context: ./frontend
+    image: registry.antoxer.ru/momentum/frontend:latest
     restart: unless-stopped
     expose:
       - "80"
