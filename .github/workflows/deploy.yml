@@ -24,3 +24,5 @@ jobs:
         run: docker compose pull backend frontend
       - name: Restart services
         run: docker compose up -d
+      - name: Cleanup
+        run: docker system prune -f

@@ -73,7 +73,6 @@ function TasksContainer() {
 
   return (
     <div className="flex flex-col md:gap-3">
-      <span>12345246</span>
       {currentTab === 'archived' && tasks.length > 0 && (
         <div className="text-center text-sm text-default-400 mb-3">
           В архиве отображаются только последние <b>15</b> архивных задач
