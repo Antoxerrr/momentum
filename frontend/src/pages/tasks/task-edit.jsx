@@ -6,6 +6,7 @@ import { Fade } from '@/components/animations/fade.jsx';
 import { TaskForm } from '@/components/tasks/task-form.jsx';
 import { getAPI } from '@/core/api.js';
 import { setDocumentTitle } from '@/core/utils.js';
+import LoadingSpinner from '@/components/loading-spinner.jsx';
 
 export default function TaskEditPage() {
   const { taskId } = useParams();
@@ -22,10 +23,16 @@ export default function TaskEditPage() {
 
   return (
     <DefaultLayout>
-      <div className="w-full flex flex-col items-center">
+      <div className="w-full flex flex-col items-center p-5 md:px-10 md:py-0">
         <div className="md:w-1/2 w-full">
           <Fade duration={0.5} show={true}>
-            <TaskForm taskData={taskData} />
+            {taskData ? (
+              <TaskForm taskData={taskData} />
+            ) : (
+              <div className="w-full flex justify-center py-12">
+                <LoadingSpinner />
+              </div>
+            )}
           </Fade>
         </div>
       </div>

@@ -61,3 +61,23 @@ class TaskSerializer(serializers.ModelSerializer):
         task.save()
 
         return task
+
+    @atomic
+    def update(self, instance, validated_data):
+        penalty_task_data = validated_data.pop('penalty_task', serializers.empty)
+
+        if penalty_task_data is None:
+            instance.penalty_task = None
+        elif penalty_task_data is not serializers.empty:
+            if instance.penalty_task:
+                instance.penalty_task.name = penalty_task_data.get('name', instance.penalty_task.name)
+                instance.penalty_task.description = penalty_task_data.get(
+                    'description',
+                    instance.penalty_task.description,
+                )
+                instance.penalty_task.save()
+            else:
+                penalty_task = Task.objects.create(**penalty_task_data, user=instance.user)
+                instance.penalty_task = penalty_task
+
+        return super().update(instance, validated_data)

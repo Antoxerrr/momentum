@@ -20,25 +20,23 @@ const periodTabs = {
 };
 
 export function TaskForm({ setFormActive, taskData }) {
-  const [addPenaltyTask, setAddPenaltyTask] = useState(false);
-  const [selectedTaskType, setSelectedTaskType] = useState(periodTabs.DATE);
+  const [addPenaltyTask, setAddPenaltyTask] = useState(
+    Boolean(taskData?.penalty_task),
+  );
+  const [selectedTaskType, setSelectedTaskType] = useState(
+    taskData?.period || periodTabs.DATE,
+  );
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const isCreating = !taskData;
 
-  const { createTask } = useTasksStore(
+  const { createTask, editTask } = useTasksStore(
     useShallow((state) => ({
       createTask: state.createTask,
       editTask: state.editTask,
     })),
   );
-
-  useEffect(() => {
-    if (!isCreating) {
-      reset({ name: 'fsgsdfgs' });
-    }
-  }, []);
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)');
@@ -54,29 +52,67 @@ export function TaskForm({ setFormActive, taskData }) {
     return () => media.removeListener(update);
   }, []);
 
-  const { handleSubmit, control, reset } = useForm();
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: {
+      name: '',
+      description: '',
+      date: '',
+      penalty_task: {
+        name: '',
+        description: '',
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (!taskData) {
+      return;
+    }
+
+    setSelectedTaskType(taskData.period || periodTabs.DATE);
+    setAddPenaltyTask(Boolean(taskData.penalty_task));
+    reset({
+      name: taskData.name || '',
+      description: taskData.description || '',
+      date: taskData.date || '',
+      penalty_task: {
+        name: taskData.penalty_task?.name || '',
+        description: taskData.penalty_task?.description || '',
+      },
+    });
+  }, [taskData, reset]);
 
   const onSubmit = async (data) => {
     setLoading(true);
 
     if (selectedTaskType !== periodTabs.DATE) {
       data.period = selectedTaskType;
-      data.date = undefined;
+      data.date = null;
+    } else {
+      data.period = null;
     }
 
     if (!addPenaltyTask) {
-      data.penalty_task = undefined;
+      if (!isCreating && taskData?.penalty_task) {
+        data.penalty_task = null;
+      } else {
+        data.penalty_task = undefined;
+      }
     }
 
     try {
-      await createTask(data);
+      if (isCreating) {
+        await createTask(data);
+      } else {
+        await editTask(taskData.id, data);
+      }
 
       addToast({
         title: isCreating ? 'Задача создана' : 'Задача изменена',
         color: 'success',
       });
       if (isCreating) {
-        setFormActive(false);
+        setFormActive?.(false);
         reset();
       } else {
         navigate(`/tasks/${taskData.id}`, { replace: true });
@@ -261,7 +297,7 @@ export function TaskForm({ setFormActive, taskData }) {
         type="submit"
         variant="shadow"
       >
-        Создать
+        {isCreating ? 'Создать' : 'Сохранить'}
       </Button>
     </Form>
   );

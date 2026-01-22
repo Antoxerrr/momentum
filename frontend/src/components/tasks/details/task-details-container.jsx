@@ -36,6 +36,10 @@ export default function TaskDetailsContainer() {
     // TODO: мб добавить больше анимаций и вывода инфы
   };
 
+  const handleBack = () => {
+    navigate('/tasks');
+  };
+
   if (!taskData) {
     return (
       <>
@@ -53,7 +57,7 @@ export default function TaskDetailsContainer() {
           <div className="flex justify-between items-center w-full px-2 text-default-400">
             <div
               className="flex gap-2 items-center cursor-pointer font-medium hover:text-default-300 transition-all"
-              onClick={() => navigate(-1)}
+              onClick={handleBack}
             >
               <FaArrowLeft />
               Назад
@@ -160,7 +164,7 @@ export default function TaskDetailsContainer() {
               color="primary"
               startContent={<FaPencil />}
               variant="solid"
-              onPress={() => setShowArchiveModal(true)}
+              onPress={() => navigate(`/tasks/${taskId}/edit`)}
             >
               Редактировать
             </Button>
