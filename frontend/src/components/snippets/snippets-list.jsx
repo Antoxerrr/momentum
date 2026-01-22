@@ -19,7 +19,7 @@ export default function SnippetsList({ className }) {
   if (listLoading) {
     return (
       <Fade duration={0.7} show={true}>
-        <div className="w-100 p-16 flex items-center justify-center">
+        <div className="w-100 p-0 md:p-16 mt-7 md:mt-0 flex items-center justify-center">
           <LoadingSpinner />
         </div>
       </Fade>

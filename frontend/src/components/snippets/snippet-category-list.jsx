@@ -36,13 +36,13 @@ function ClearCategoriesButton() {
   );
   const clearSelectedCategories = useSnippetsStore((state) => state.clearSelectedCategories);
 
+  if (!isCategoriesSelected) {
+    return <div></div>
+  }
+
   return (
-    <>
-      {(isCategoriesSelected &&
-      <div className="flex justify-center items-center min-w-[25px] ml-[-5px]">
-        <BiX className="w-full h-full cursor-pointer" onClick={clearSelectedCategories}/>
-      </div>
-      )}
-    </>
+    <div className="flex justify-center items-center w-[25px] ml-[-5px]">
+      <BiX className="w-full h-full cursor-pointer" onClick={clearSelectedCategories}/>
+    </div>
   )
 }
