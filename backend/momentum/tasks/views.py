@@ -24,6 +24,15 @@ class TaskViewSet(ModelViewSet):
 
         return self.request.user.tasks.annotate_user_today(user_tz).annotate_actual_state()
 
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+        archived_param = self.request.query_params.get('archived')
+
+        if archived_param in ('1', 'true', 'True'):
+            return queryset.order_by('-updated')[:15]
+
+        return queryset
+
     @atomic
     @extend_schema(request=None, responses=None)
     @action(methods=('POST',), detail=True)

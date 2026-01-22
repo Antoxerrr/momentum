@@ -24,12 +24,13 @@ export function TasksList() {
 }
 
 function TasksContainer() {
-  const { tasks, error, loading, loadTasksForCurrentTab } = useTasksStore(
+  const { tasks, error, loading, loadTasksForCurrentTab, currentTab } = useTasksStore(
     useShallow((state) => ({
       tasks: state.tasks,
       error: state.error,
       loading: state.listLoading,
       loadTasksForCurrentTab: state.loadTasksForCurrentTab,
+      currentTab: state.currentTab,
     })),
   );
 
@@ -72,6 +73,11 @@ function TasksContainer() {
 
   return (
     <div className="flex flex-col md:gap-3">
+      {currentTab === 'archived' && tasks.length > 0 && (
+        <div className="text-center text-sm text-default-400 mb-3">
+          В архиве отображаются только последние <b>15</b> архивных задач
+        </div>
+      )}
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} />
       ))}
