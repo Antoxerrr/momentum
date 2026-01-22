@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
+    "build:lowmem": "NODE_OPTIONS=--max_old_space_size=768 vite build",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "preview": "vite preview"
