@@ -1,6 +1,6 @@
 #!/bin/sh
 
-python manage.py collectstatic --no-input
-python manage.py migrate
+python momentum/manage.py collectstatic --no-input
+python momentum/manage.py migrate
 
 exec "$@"

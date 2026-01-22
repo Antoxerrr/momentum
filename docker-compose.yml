@@ -20,7 +20,7 @@ services:
     build:
       context: ./backend
     restart: unless-stopped
-    command: gunicorn --bind 0.0.0.0:8000 --workers 4 --log-level info momentum.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 --workers 2 --log-level info momentum.wsgi:application
     env_file:
       - .env
     environment:
