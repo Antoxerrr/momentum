@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: "postgres:16.1-alpine"
@@ -66,4 +64,4 @@ volumes:
 networks:
   nginx-proxy:
     external:
-      name: net-nginx-proxy
+      name: proxy
